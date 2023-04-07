@@ -19,7 +19,7 @@ class ParkingLock {
         void closeLock();
         void turnLockWithDelay(int delayTime);
         void setLockKey(String key);
-        void closeLockWithKey(String key);
+        bool closeLockWithKey(String key);
         
         void loop();
 };

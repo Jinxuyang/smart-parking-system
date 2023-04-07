@@ -21,7 +21,8 @@ bool VehicleDetector::hasCar() {
 }
 
 unsigned long VehicleDetector::getParkingTime() {
-    if (!parkingStatus) {
+    // when there is a car, return 0
+    if (parkingStatus) {
         return 0;
     }
     return millis() - parkingTick;
@@ -49,8 +50,7 @@ bool VehicleDetector::parkingStatusChanged() {
 
 void VehicleDetector::loop() {
     if (millis() - detectTick > 5000) {
-        Serial.println("Detecting car ...");
-        Serial.println("Has car: " + String(hasCar()));
+        hasCar();
         detectTick = millis();
     }
 }

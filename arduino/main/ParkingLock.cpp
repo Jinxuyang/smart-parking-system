@@ -27,12 +27,16 @@ void ParkingLock::closeLock() {
 
 void ParkingLock::setLockKey(String key) {
     this->lockKey = key;
+    Serial.printf("Set lock key: %s\n", lockKey.c_str());
 }
 
-void ParkingLock::closeLockWithKey(String key) {
-    if (key == lockKey) {
+bool ParkingLock::closeLockWithKey(String key) {
+    Serial.printf("Compare key: '%s' with lock key: '%s'\n", key.c_str(), lockKey.c_str());
+    if (lockKey == key) {
         closeLock();
+        return true;
     }
+    return false;
 }
 
 void ParkingLock::turnLockWithDelay(int delayTime) {
