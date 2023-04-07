@@ -11,9 +11,11 @@ class VehicleDetector {
 
         bool parkingStatus;
         bool prevParkingStatus;
-        unsigned long parkingTick;
-        String macAddress;
 
+        unsigned long parkingTick;
+        unsigned long detectTick;
+
+        String macAddress;
     public:
         VehicleDetector(int echoPin, int triggerPin, String macAddress);
 

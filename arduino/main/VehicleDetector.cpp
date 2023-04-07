@@ -1,6 +1,6 @@
 #include "VehicleDetector.h"
 
-VehicleDetector::VehicleDetector(int echoPin, int triggerPin, String macAddress) : distanceSensor(echoPin, triggerPin) {
+VehicleDetector::VehicleDetector(int echoPin, int triggerPin, String macAddress) : distanceSensor(triggerPin, echoPin) {
     this->macAddress = macAddress;
     this->parkingStatus = false;
     this->prevParkingStatus = false;
@@ -48,4 +48,9 @@ bool VehicleDetector::parkingStatusChanged() {
 }
 
 void VehicleDetector::loop() {
+    if (millis() - detectTick > 5000) {
+        Serial.println("Detecting car ...");
+        Serial.println("Has car: " + String(hasCar()));
+        detectTick = millis();
+    }
 }
