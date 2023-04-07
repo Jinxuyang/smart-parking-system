@@ -3,9 +3,10 @@
 ParkingLock::ParkingLock(int servopin) {
     servo.attach(servopin);
     this->lockStatus = false;
-    this->isTurning = false;
     this->delayTime = 0;
     this->lockTick = 0;
+
+    turnLock();
 }
 
 void ParkingLock::turnLock() {
@@ -38,7 +39,6 @@ void ParkingLock::turnLockWithDelay(int delayTime) {
     if (lockStatus) {
         return;
     }
-    isTurning = true;
     this->delayTime = delayTime;
     lockTick = millis();
 }

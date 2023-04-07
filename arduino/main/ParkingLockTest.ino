@@ -6,20 +6,27 @@ ParkingLock parkingLock(servoPin);
 
 void setup(){
     Serial.begin(115200);
-    parkingLock.turnLock();
-    Serial.println("Turn lock");
-    delay(1000);
+    Serial.println("Start");
+    delay(2000);
+
     parkingLock.closeLock();
     Serial.println("Close lock");
-    delay(1000);
+    delay(2000);
+
+    Serial.println("Turn lock");
+    parkingLock.turnLock();
+    delay(2000);
+
+    Serial.println("Set key");
+    parkingLock.setLockKey("1234");
+    delay(2000);
+
+    Serial.println("turn lock with key");
+    parkingLock.closeLockWithKey("1234");
+    delay(2000);
 
     Serial.println("Turn lock with delay");
     parkingLock.turnLockWithDelay(5000);
-
-    delay(1000);
-    parkingLock.turnLock();
-
-    parkingLock.turnLockWithDelay(2000);
 }
 
 void loop(){

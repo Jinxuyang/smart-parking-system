@@ -12,7 +12,6 @@ class ParkingLock {
         bool lockStatus;
         unsigned long lockTick;
         unsigned long delayTime;
-        bool isTurning;
     public:
         ParkingLock(int servoPin);
 
