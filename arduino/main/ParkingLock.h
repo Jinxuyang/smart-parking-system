@@ -1,46 +1,43 @@
 #ifndef ParkingLock_h
 #define ParkingLock_h
 
+#include <Arduino.h>
 #include <Servo.h>
 #include <HCSR04.h>
-#include <Arduino.h>
 #include <ArduinoJson.h>
 
 class ParkingLock {
+    private:
+        Servo servo;
+        UltraSonicDistanceSensor distanceSensor;
+        String lockKey;
+        bool lockStatus;
 
-public:
-    ParkingLock(int servoPin, int echoPin, int triggerPin, String macAddress);
-    ~ParkingLock();
+        bool parkingStatus;
+        bool prevParkingStatus;
+        
+        unsigned long lockTick;
+        unsigned long delayTime;
 
-    bool hasCar();
-    unsigned long getParkingTime();
-    String getParkingStatusJSON();
-    bool parkingStatusChanged();
+        unsigned long parkingTick;
+        String macAddress;
 
-    void turnLock();
-    void closeLock();
-    void turnLockWithDelay(int delayTime);
-    void setLockKey(String key);
-    void closeLockWithKey(String key);
-    
-    void loop();
-private:
-    Servo *servo;
-    UltraSonicDistanceSensor *distanceSensor;
-    String lockKey;
-    bool lockStatus;
+    public:
+        ParkingLock(int servoPin, int echoPin, int triggerPin, String macAddress);
 
-    bool parkingStatus;
-    bool prevParkingStatus;
-    
-    unsigned long lockTick;
-    unsigned long delayTime;
+        bool hasCar();
+        unsigned long getParkingTime();
+        String getParkingStatusJSON();
+        bool parkingStatusChanged();
 
-    unsigned long parkingTick;
-    String macAddress;
+        void turnLock();
+        void closeLock();
+        void turnLockWithDelay(int delayTime);
+        void setLockKey(String key);
+        void closeLockWithKey(String key);
+        
+        void loop();
 };
-
-
 #endif
 
 

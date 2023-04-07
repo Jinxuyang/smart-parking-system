@@ -6,7 +6,7 @@
 const byte triggerPin = D0;
 const byte echoPin = D1;
 const byte servoPin = D4;
-ParkingLock ParkingLock(servoPin, echoPin, triggerPin, WiFi.macAddress());
+ParkingLock parkingLock(servoPin, echoPin, triggerPin, WiFi.macAddress());
 
 const byte RX = D6;
 const byte TX = D5;
@@ -25,6 +25,8 @@ const char *mqtt_password = "123456";
 
 const char* parkingStatusTopic = "ParkingStatus";
 const char* unlockKeyTopic = "UnlockKey";
+
+unsigned long detectTick = 0;
 
 void connectToWifi() {
     WiFi.begin(ssid, password);
@@ -50,22 +52,22 @@ void connectToMQTT() {
     }
 }
 
-void recvBlueMsg() {
-    if (EEBlue.available()) {
-        String command = EEBlue.readString();
-        Serial.println(command);
-        if (command.startsWith("unlock:")) {
-            command = command.replace("unlock:", "");
-            if (command == key) {
-                turnServo();
-                key = "";
-            }
-        }
-        else if (command.startsWith("lock")) {
-            closeServo();
-        }
-    }
-}
+// void recvBlueMsg() {
+//     if (EEBlue.available()) {
+//         String command = EEBlue.readString();
+//         Serial.println(command);
+//         if (command.startsWith("unlock:")) {
+//             command = command.replace("unlock:", "");
+//             if (command == key) {
+//                 turnServo();
+//                 key = "";
+//             }
+//         }
+//         else if (command.startsWith("lock")) {
+//             closeServo();
+//         }
+//     }
+// }
 
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
@@ -81,7 +83,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     String key = mqtt_buff.substring(18);
     Serial.print("Get key: ");
     Serial.println(key);
-    ParkingLock.setLockKey(key);
+    parkingLock.setLockKey(key);
   }
   
   mqtt_buff = "";
@@ -92,8 +94,8 @@ void uploadParkingStatus() {
         detectTick = millis();
         Serial.println("Detect car ...");
 
-        if (ParkingLock.parkingStatusChanged()) {
-            client.publish(parkingStatusTopic, ParkingLock.getParkingStatusJSON().c_str());
+        if (parkingLock.parkingStatusChanged()) {
+            client.publish(parkingStatusTopic, parkingLock.getParkingStatusJSON().c_str());
         }
     }
 }
@@ -118,5 +120,5 @@ void loop () {
     uploadParkingStatus();
 
     client.loop();
-    ParkingLock.loop();      
+    parkingLock.loop();      
 }
