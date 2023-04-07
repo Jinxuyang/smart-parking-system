@@ -1,51 +1,11 @@
 #include "ParkingLock.h"
 
-ParkingLock::ParkingLock(int servoPin, int echoPin, int triggerPin, String macAddress) : distanceSensor(echoPin, triggerPin){
-    servo.attach(servoPin);
-    this->macAddress = macAddress;
+ParkingLock::ParkingLock(int servopin) {
+    servo.attach(servopin);
     this->lockStatus = false;
-    this->parkingStatus = false;
-    this->prevParkingStatus = false;
-}
-
-bool ParkingLock::hasCar() {
-    if(distanceSensor.measureDistanceCm() < 20) {
-        if (!parkingStatus) {
-            parkingTick = millis();
-        }
-        parkingStatus = true;
-        return true;
-    } else {
-        parkingStatus = false;
-        return false;
-    }
-}
-
-unsigned long ParkingLock::getParkingTime() {
-    if (!parkingStatus) {
-        return 0;
-    }
-    return millis() - parkingTick;
-}
-
-String ParkingLock::getParkingStatusJSON() {
-    DynamicJsonDocument parkingStatus(1024);
-    parkingStatus["macAddress"] = macAddress;
-    parkingStatus["hasCar"] = hasCar();
-    parkingStatus["parkingTime"] = getParkingTime();
-
-    String jsonStr;
-    serializeJson(parkingStatus, jsonStr);
-    return jsonStr;
-}
-
-bool ParkingLock::parkingStatusChanged() {
-    if (parkingStatus != prevParkingStatus) {
-        prevParkingStatus = parkingStatus;
-        return true;
-    } else {
-        return false;
-    }
+    this->isTurning = false;
+    this->delayTime = 0;
+    this->lockTick = 0;
 }
 
 void ParkingLock::turnLock() {
@@ -78,17 +38,13 @@ void ParkingLock::turnLockWithDelay(int delayTime) {
     if (lockStatus) {
         return;
     }
+    isTurning = true;
     this->delayTime = delayTime;
     lockTick = millis();
 }
 
 void ParkingLock::loop() {
-    if (parkingStatusChanged()) {
-        if (!parkingStatus) {
-            turnLockWithDelay(10000);
-        }
-    }
-    if (millis() - lockTick > delayTime) {
+    if (!lockStatus && millis() - lockTick > delayTime) {
         turnLock();
     }
 }

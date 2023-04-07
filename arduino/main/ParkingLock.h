@@ -3,32 +3,18 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-#include <HCSR04.h>
-#include <ArduinoJson.h>
 
 class ParkingLock {
     private:
         Servo servo;
-        UltraSonicDistanceSensor distanceSensor;
+
         String lockKey;
         bool lockStatus;
-
-        bool parkingStatus;
-        bool prevParkingStatus;
-        
         unsigned long lockTick;
         unsigned long delayTime;
-
-        unsigned long parkingTick;
-        String macAddress;
-
+        bool isTurning;
     public:
-        ParkingLock(int servoPin, int echoPin, int triggerPin, String macAddress);
-
-        bool hasCar();
-        unsigned long getParkingTime();
-        String getParkingStatusJSON();
-        bool parkingStatusChanged();
+        ParkingLock(int servoPin);
 
         void turnLock();
         void closeLock();
