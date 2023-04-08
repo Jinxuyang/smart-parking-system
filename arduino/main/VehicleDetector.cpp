@@ -29,14 +29,18 @@ unsigned long VehicleDetector::getParkingTime() {
 }
 
 String VehicleDetector::getParkingStatusJSON() {
+    String jsonStr;
+    serializeJson(getParkingStatus(), jsonStr);
+    return jsonStr;
+}
+
+DynamicJsonDocument VehicleDetector::getParkingStatus() {
     DynamicJsonDocument parkingStatus(1024);
     parkingStatus["macAddress"] = macAddress;
     parkingStatus["hasCar"] = hasCar();
     parkingStatus["parkingTime"] = getParkingTime();
 
-    String jsonStr;
-    serializeJson(parkingStatus, jsonStr);
-    return jsonStr;
+    return parkingStatus;
 }
 
 bool VehicleDetector::parkingStatusChanged() {

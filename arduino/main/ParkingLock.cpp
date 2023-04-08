@@ -10,19 +10,17 @@ ParkingLock::ParkingLock(int servopin) {
 }
 
 void ParkingLock::turnLock() {
-    if (lockStatus){
-        return;
-    }
+    Serial.println("Turn lock");
     servo.write(10);
     lockStatus = true;
+    Serial.println("Lock turned");
 }
 
 void ParkingLock::closeLock() {
-    if (!lockStatus) {
-        return;
-    }
+    Serial.println("Close lock");
     servo.write(170);
     lockStatus = false;
+    Serial.println("Lock closed");
 }
 
 void ParkingLock::setLockKey(String key) {
@@ -47,8 +45,12 @@ void ParkingLock::turnLockWithDelay(int delayTime) {
     lockTick = millis();
 }
 
+bool ParkingLock::getLockStatus() {
+    return lockStatus;
+}
+
 void ParkingLock::loop() {
-    if (!lockStatus && millis() - lockTick > delayTime) {
-        turnLock();
-    }
+    // if (!lockStatus && millis() - lockTick > delayTime) {
+    //     turnLock();
+    // }
 }

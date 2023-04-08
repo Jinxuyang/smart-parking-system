@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include <PubSubClient.h>
 #include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
 #include "ParkingLock.h"
 #include "VehicleDetector.h"
 
@@ -99,8 +100,7 @@ void recvBluetoothMsg() {
                 Serial.println("Unlock fail");
             }
             
-        }
-        else if (command.startsWith("lock")) {
+        } else if (command.startsWith("lock")) {
             parkingLock.turnLock();
         }
     }
@@ -127,10 +127,17 @@ void loop () {
 
     // when parking status changed, publish to mqtt server
     if (detector.parkingStatusChanged()) {
-        String msg = detector.getParkingStatusJSON();
+        DynamicJsonDocument doc = detector.getParkingStatus();
+        doc["lockStatus"] = parkingLock.getLockStatus();
+        String msg;
+        serializeJson(doc, msg);
         client.publish(parkingStatusTopic, msg.c_str());
         Serial.print("Publish parking status: ");
         Serial.println(msg);
+    }
+
+    if (detector.parkingStatusChanged() && detector.hasCar()) {
+        //parkingLock.turnLockWithDelay(5000);
     }
     
     recvBluetoothMsg();

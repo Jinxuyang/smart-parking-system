@@ -22,6 +22,7 @@ class VehicleDetector {
         bool hasCar();
         unsigned long getParkingTime();
         String getParkingStatusJSON();
+        DynamicJsonDocument getParkingStatus();
         bool parkingStatusChanged();
 
         void loop();
