@@ -1,6 +1,8 @@
 #include <SoftwareSerial.h>
 #include <PubSubClient.h>
 #include <ESP8266WiFi.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 #include <ArduinoJson.h>
 #include "ParkingLock.h"
 #include "VehicleDetector.h"
@@ -20,6 +22,10 @@ SoftwareSerial EEBlue(RX, TX);
 // innit wifi and mqtt
 WiFiClient espClient; 
 PubSubClient client(espClient);
+
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, 8 * 3600);
+
 
 const char* ssid = "SEXBABY";
 const char* password = "204204204";
@@ -125,21 +131,19 @@ void loop () {
         connectToMQTT();
     }
 
-    // when parking status changed, publish to mqtt server
-    if (detector.parkingStatusChanged()) {
+    timeClient.update();
+
+    // when parking status or lock status changed, publish to mqtt server
+    if (detector.parkingStatusChanged() || parkingLock.lockStatusChanged()) {
         DynamicJsonDocument doc = detector.getParkingStatus();
         doc["lockStatus"] = parkingLock.getLockStatus();
+        doc["time"] = timeClient.getEpochTime();
         String msg;
         serializeJson(doc, msg);
         client.publish(parkingStatusTopic, msg.c_str());
         Serial.print("Publish parking status: ");
         Serial.println(msg);
     }
-
-    if (detector.parkingStatusChanged() && detector.hasCar()) {
-        //parkingLock.turnLockWithDelay(5000);
-    }
-    
     recvBluetoothMsg();
     client.loop();
     parkingLock.loop();

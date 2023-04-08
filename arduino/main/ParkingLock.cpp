@@ -49,6 +49,14 @@ bool ParkingLock::getLockStatus() {
     return lockStatus;
 }
 
+bool ParkingLock::lockStatusChanged() {
+    if (lockStatus != prevLockStatus) {
+        prevLockStatus = lockStatus;
+        return true;
+    }
+    return false;
+}
+
 void ParkingLock::loop() {
     // if (!lockStatus && millis() - lockTick > delayTime) {
     //     turnLock();

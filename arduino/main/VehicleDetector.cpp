@@ -11,6 +11,8 @@ bool VehicleDetector::hasCar() {
     if(distanceSensor.measureDistanceCm() < 20) {
         if (!parkingStatus) {
             parkingTick = millis();
+        } else {
+            noParkingTick = millis();
         }
         parkingStatus = true;
         return true;
@@ -19,6 +21,13 @@ bool VehicleDetector::hasCar() {
         return false;
     }
 }
+//when there is no car for 1 min, return true
+bool VehicleDetector::isParkingTimeOut() {
+    if (parkingStatus) {
+        return true;
+    }
+    return getNoParkingTime() > 60000;
+}
 
 unsigned long VehicleDetector::getParkingTime() {
     // when there is a car, return 0
@@ -26,6 +35,14 @@ unsigned long VehicleDetector::getParkingTime() {
         return 0;
     }
     return millis() - parkingTick;
+}
+
+unsigned long VehicleDetector::getNoParkingTime() {
+    // when there is a car, return 0
+    if (!parkingStatus) {
+        return 0;
+    }
+    return millis() - noParkingTick;
 }
 
 String VehicleDetector::getParkingStatusJSON() {
@@ -38,7 +55,7 @@ DynamicJsonDocument VehicleDetector::getParkingStatus() {
     DynamicJsonDocument parkingStatus(1024);
     parkingStatus["macAddress"] = macAddress;
     parkingStatus["hasCar"] = hasCar();
-    parkingStatus["parkingTime"] = getParkingTime();
+    //parkingStatus["parkingTime"] = getParkingTime();
 
     return parkingStatus;
 }
@@ -53,7 +70,7 @@ bool VehicleDetector::parkingStatusChanged() {
 }
 
 void VehicleDetector::loop() {
-    if (millis() - detectTick > 5000) {
+    if (millis() - detectTick > 1000) {
         hasCar();
         detectTick = millis();
     }

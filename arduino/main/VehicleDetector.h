@@ -13,6 +13,7 @@ class VehicleDetector {
         bool prevParkingStatus;
 
         unsigned long parkingTick;
+        unsigned long noParkingTick;
         unsigned long detectTick;
 
         String macAddress;
@@ -20,7 +21,9 @@ class VehicleDetector {
         VehicleDetector(int echoPin, int triggerPin, String macAddress);
 
         bool hasCar();
+        bool isParkingTimeOut();
         unsigned long getParkingTime();
+        unsigned long getNoParkingTime();
         String getParkingStatusJSON();
         DynamicJsonDocument getParkingStatus();
         bool parkingStatusChanged();

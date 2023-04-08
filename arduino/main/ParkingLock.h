@@ -10,6 +10,7 @@ class ParkingLock {
 
         String lockKey;
         bool lockStatus;
+        bool prevLockStatus;
         unsigned long lockTick;
         unsigned long delayTime;
     public:
@@ -18,6 +19,7 @@ class ParkingLock {
         void turnLock();
         void closeLock();
         bool getLockStatus();
+        bool lockStatusChanged();
         void turnLockWithDelay(int delayTime);
         void setLockKey(String key);
         bool closeLockWithKey(String key);
