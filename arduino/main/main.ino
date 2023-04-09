@@ -12,7 +12,7 @@ const byte triggerPin = D0;
 const byte echoPin = D1;
 const byte servoPin = D4;
 ParkingLock parkingLock(servoPin);
-VehicleDetector detector(echoPin, triggerPin, WiFi.macAddress());
+VehicleDetector detector(echoPin, triggerPin);
 
 // init bluetooth
 const byte RX = D6;
@@ -37,6 +37,8 @@ const char *mqtt_password = "123456";
 
 const char* parkingStatusTopic = "ParkingStatus";
 const char* unlockKeyTopic = "UnlockKey";
+
+unsigned long lockTick = 0;
 
 void connectToWifi() {
     WiFi.begin(ssid, password);
@@ -112,6 +114,16 @@ void recvBluetoothMsg() {
     }
 }
 
+String packParkingInfo() {
+    DynamicJsonDocument parkingStatus(1024);
+    parkingStatus["macAddress"] = WiFi.macAddress();
+    parkingStatus["isLock"] = parkingLock.getLockStatus();
+    parkingStatus["hasCar"] = detector.hasCar();
+    parkingStatus["time"] = timeClient.getEpochTime();
+    String msg;
+    serializeJson(parkingStatus, msg);
+    return msg;
+}
 
 void setup () {
     Serial.begin(115200);  
@@ -135,17 +147,13 @@ void loop () {
 
     // when parking status or lock status changed, publish to mqtt server
     if (detector.parkingStatusChanged() || parkingLock.lockStatusChanged()) {
-        DynamicJsonDocument doc = detector.getParkingStatus();
-        doc["lockStatus"] = parkingLock.getLockStatus();
-        doc["time"] = timeClient.getEpochTime();
-        String msg;
-        serializeJson(doc, msg);
+        String msg = packParkingInfo();
         client.publish(parkingStatusTopic, msg.c_str());
         Serial.print("Publish parking status: ");
         Serial.println(msg);
     }
+
     recvBluetoothMsg();
     client.loop();
-    parkingLock.loop();
     detector.loop();      
 }
