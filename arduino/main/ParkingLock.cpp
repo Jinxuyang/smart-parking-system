@@ -3,8 +3,6 @@
 ParkingLock::ParkingLock(int servopin) {
     servo.attach(servopin);
     this->lockStatus = false;
-    this->delayTime = 0;
-    this->lockTick = 0;
 
     turnLock();
 }
@@ -37,14 +35,6 @@ bool ParkingLock::closeLockWithKey(String key) {
     return false;
 }
 
-void ParkingLock::turnLockWithDelay(int delayTime) {
-    if (lockStatus) {
-        return;
-    }
-    this->delayTime = delayTime;
-    lockTick = millis();
-}
-
 bool ParkingLock::getLockStatus() {
     return lockStatus;
 }
@@ -55,10 +45,4 @@ bool ParkingLock::lockStatusChanged() {
         return true;
     }
     return false;
-}
-
-void ParkingLock::loop() {
-    // if (!lockStatus && millis() - lockTick > delayTime) {
-    //     turnLock();
-    // }
 }

@@ -1,7 +1,6 @@
 #include "VehicleDetector.h"
 
-VehicleDetector::VehicleDetector(int echoPin, int triggerPin, String macAddress) : distanceSensor(triggerPin, echoPin) {
-    this->macAddress = macAddress;
+VehicleDetector::VehicleDetector(int echoPin, int triggerPin) : distanceSensor(triggerPin, echoPin) {
     this->parkingStatus = false;
     this->prevParkingStatus = false;
     this->parkingTick = 0;
@@ -9,9 +8,7 @@ VehicleDetector::VehicleDetector(int echoPin, int triggerPin, String macAddress)
 
 bool VehicleDetector::hasCar() {
     if(distanceSensor.measureDistanceCm() < 20) {
-        if (!parkingStatus) {
-            parkingTick = millis();
-        } else {
+        if (parkingStatus) {
             noParkingTick = millis();
         }
         parkingStatus = true;
@@ -53,7 +50,6 @@ String VehicleDetector::getParkingStatusJSON() {
 
 DynamicJsonDocument VehicleDetector::getParkingStatus() {
     DynamicJsonDocument parkingStatus(1024);
-    parkingStatus["macAddress"] = macAddress;
     parkingStatus["hasCar"] = hasCar();
     //parkingStatus["parkingTime"] = getParkingTime();
 

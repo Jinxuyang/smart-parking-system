@@ -18,7 +18,7 @@ class VehicleDetector {
 
         String macAddress;
     public:
-        VehicleDetector(int echoPin, int triggerPin, String macAddress);
+        VehicleDetector(int echoPin, int triggerPin);
 
         bool hasCar();
         bool isParkingTimeOut();
