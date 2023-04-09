@@ -20,6 +20,10 @@ public class ParkingDevice implements Serializable {
 
     private String macAddress;
 
+    public ParkingDevice(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
     public Integer getId() {
         return id;
     }

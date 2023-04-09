@@ -1,7 +1,12 @@
 package com.verge.parking.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.verge.parking.common.CommonResponse;
+import com.verge.parking.entity.User;
+import com.verge.parking.service.IUserService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * <p>
@@ -14,5 +19,16 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    @Resource
+    private IUserService userService;
 
+    @PostMapping("/register")
+    public CommonResponse register(String username, String password) {
+        User user = new User(username ,password);
+        if (userService.register(user)) {
+            return CommonResponse.success();
+        } else {
+            return CommonResponse.fail();
+        }
+    }
 }

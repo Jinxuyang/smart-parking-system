@@ -16,5 +16,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
-
+    private UserMapper userMapper;
+    @Override
+    public boolean register(User user) {
+        if (userMapper.insert(user) == 1) {
+            return true;
+        }
+        return false;
+    }
 }
