@@ -20,7 +20,7 @@ const byte TX = D5;
 SoftwareSerial EEBlue(RX, TX);
 
 // innit wifi and mqtt
-WiFiClient espClient; 
+WiFiClient espClient;
 PubSubClient client(espClient);
 
 WiFiUDP ntpUDP;
@@ -30,7 +30,7 @@ NTPClient timeClient(ntpUDP, 8 * 3600);
 const char* ssid = "SEXBABY";
 const char* password = "204204204";
 
-const char* mqtt_server = "43.138.172.185";
+const char* mqtt_server = "121.43.147.234";
 const int mqtt_port = 1883;
 const char *mqtt_username = "verge";
 const char *mqtt_password = "123456";
