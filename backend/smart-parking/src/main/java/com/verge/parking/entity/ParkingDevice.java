@@ -1,6 +1,8 @@
 package com.verge.parking.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,7 @@ import java.io.Serializable;
 @TableName("parking_device")
 public class ParkingDevice implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Integer id;

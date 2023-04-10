@@ -3,6 +3,8 @@ package com.verge.parking.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -37,8 +39,17 @@ public class ParkingOrder implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-    private Integer status;
+    private OrderStatus status;
 
+    public static ParkingOrder create(Integer userId, Integer parkingPlaceId) {
+        ParkingOrder order = new ParkingOrder();
+        order.setUserId(userId);
+        order.setParkingPlaceId(parkingPlaceId);
+        order.setStartTime(LocalDateTime.now());
+        order.setFee(0);
+        order.setStatus(OrderStatus.WAITING);
+        return order;
+    }
     public Integer getId() {
         return id;
     }
@@ -103,11 +114,11 @@ public class ParkingOrder implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public Integer getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

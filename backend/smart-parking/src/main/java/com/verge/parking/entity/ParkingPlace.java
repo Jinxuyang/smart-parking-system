@@ -32,7 +32,7 @@ public class ParkingPlace implements Serializable {
 
     private Integer number;
 
-    private Boolean status;
+    private ParkingPlaceStatus status;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
@@ -80,11 +80,11 @@ public class ParkingPlace implements Serializable {
         this.number = number;
     }
 
-    public Boolean getStatus() {
+    public ParkingPlaceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(ParkingPlaceStatus status) {
         this.status = status;
     }
 
