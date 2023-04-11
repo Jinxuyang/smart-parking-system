@@ -28,11 +28,8 @@ public class MQTTCallback implements MqttCallback {
             try {
                 ParkingStatusMsg parkingStatusMsg = mapper.readValue(message.getPayload(), ParkingStatusMsg.class);
                 String macAddress = parkingStatusMsg.getMacAddress();
-                ParkingPlace place = parkingPlaceService.getOne(new QueryWrapper<>(
-                        new ParkingPlace()).eq("device_mac_address", macAddress)
-                );
-
-                //place.setLockStatus(parkingStatusMsg.getIsLock());
+                // update lock status
+                parkingPlaceService.updateLockStatus(macAddress, parkingStatusMsg.isLock());
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-04-12
  */
 public interface IParkingPlaceService extends IService<ParkingPlace> {
-
+    boolean updateLockStatus(String macAddress, boolean isLock);
 }

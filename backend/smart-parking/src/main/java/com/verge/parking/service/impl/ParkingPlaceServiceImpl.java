@@ -1,5 +1,6 @@
 package com.verge.parking.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.verge.parking.entity.ParkingPlace;
 import com.verge.parking.mapper.ParkingPlaceMapper;
 import com.verge.parking.service.IParkingPlaceService;
@@ -17,4 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParkingPlaceServiceImpl extends ServiceImpl<ParkingPlaceMapper, ParkingPlace> implements IParkingPlaceService {
 
+    @Override
+    public boolean updateLockStatus(String macAddress, boolean isLock) {
+        ParkingPlace place = this.getOne(new QueryWrapper<ParkingPlace>().eq("device_mac_address", macAddress));
+        if (place == null) {
+            return false;
+        }
+        place.setLockStatus(isLock);
+        return this.updateById(place);
+    }
 }
