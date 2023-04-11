@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Verge
- * @since 2023-04-09
+ * @since 2023-04-12
  */
 public interface ParkingPlaceMapper extends BaseMapper<ParkingPlace> {
 
