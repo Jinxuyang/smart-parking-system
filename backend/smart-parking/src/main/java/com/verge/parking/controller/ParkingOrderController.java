@@ -23,9 +23,8 @@ public class ParkingOrderController {
     private IParkingOrderService parkingOrderService;
 
     @PostMapping("/order")
-    public CommonResponse order(Integer userId, Integer parkingPlaceId){
-        ParkingOrder order = ParkingOrder.create(userId, parkingPlaceId);
-        if (parkingOrderService.save(order)) {
+    public CommonResponse order(Integer userId, String macAddress){
+        if (parkingOrderService.reserve(macAddress, userId)) {
             return CommonResponse.success();
         } else {
             return CommonResponse.fail();

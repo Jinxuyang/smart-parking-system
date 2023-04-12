@@ -3,6 +3,7 @@ package com.verge.parking.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @TableName("parking_place")
 public class ParkingPlace implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Integer id;
@@ -32,7 +34,7 @@ public class ParkingPlace implements Serializable {
 
     private Integer number;
 
-    private OrderStatus status;
+    private ParkingPlaceStatus status;
 
     private LocalDateTime createTime;
 
