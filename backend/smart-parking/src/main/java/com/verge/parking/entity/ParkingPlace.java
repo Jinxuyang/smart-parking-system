@@ -32,7 +32,7 @@ public class ParkingPlace implements Serializable {
 
     private Integer number;
 
-    private Integer status;
+    private OrderStatus status;
 
     private LocalDateTime createTime;
 

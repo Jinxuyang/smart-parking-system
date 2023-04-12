@@ -1,8 +1,7 @@
 package com.verge.parking.entity;
 
 public enum OrderStatus {
-    WAITING,
+    FREE,
+    RESERVED,
     PARKING,
-    FINISHED,
-    CANCELED
 }
