@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class MQTTCallback implements MqttCallback {
     @Resource
     private IParkingPlaceService parkingPlaceService;
+    @Resource
     private IParkingOrderService parkingOrderService;
 
     @Override

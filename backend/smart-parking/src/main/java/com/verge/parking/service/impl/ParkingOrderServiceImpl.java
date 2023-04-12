@@ -1,6 +1,7 @@
 package com.verge.parking.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.verge.parking.common.KeyGenerator;
 import com.verge.parking.entity.OrderStatus;
 import com.verge.parking.entity.ParkingOrder;
 import com.verge.parking.entity.ParkingPlaceStatus;
@@ -9,12 +10,15 @@ import com.verge.parking.service.IParkingOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.verge.parking.service.IParkingPlaceService;
 import jakarta.annotation.Resource;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -29,6 +33,11 @@ import java.util.TimeZone;
 public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, ParkingOrder> implements IParkingOrderService {
     @Resource
     private IParkingPlaceService parkingPlaceService;
+    @Resource
+    private MqttClient mqttClient;
+    @Resource
+    private Map<String, String> keyCache;
+
 
     @Override
     @Transactional
@@ -39,6 +48,14 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
         }
 
         parkingPlaceService.updatePlaceStatusById(macAddress, ParkingPlaceStatus.OCCUPIED);
+
+        String key = KeyGenerator.generate();
+        keyCache.put(macAddress, key);
+        try {
+            mqttClient.publish("UnlockKey", new MqttMessage(key.getBytes()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ParkingOrder order = new ParkingOrder();
         order.setId(macAddress);
@@ -77,6 +94,11 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
                         .eq("id", macAddress)
                         .orderByDesc("create_time")
         );
+    }
+
+    @Override
+    public String getUnlockKey(String macAddress) {
+        return keyCache.get(macAddress);
     }
 
     private int getFee(long time) {

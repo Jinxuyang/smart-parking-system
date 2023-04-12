@@ -18,4 +18,6 @@ public interface IParkingOrderService extends IService<ParkingOrder> {
 
     ParkingOrder getLatestOrder(String macAddress);
 
+    String getUnlockKey(String macAddress);
+
 }
