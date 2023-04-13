@@ -5,17 +5,17 @@ import com.verge.parking.entity.OrderStatus;
 import com.verge.parking.entity.ParkingOrder;
 import com.verge.parking.service.IParkingOrderService;
 import com.verge.parking.service.IParkingPlaceService;
-import jakarta.annotation.Resource;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MQTTCallback implements MqttCallback {
-    @Resource
+    @Autowired
     private IParkingPlaceService parkingPlaceService;
-    @Resource
+    @Autowired
     private IParkingOrderService parkingOrderService;
 
     @Override

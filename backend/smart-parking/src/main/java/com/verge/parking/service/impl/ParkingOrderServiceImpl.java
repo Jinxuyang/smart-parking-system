@@ -12,6 +12,8 @@ import com.verge.parking.service.IParkingPlaceService;
 import jakarta.annotation.Resource;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,11 +33,11 @@ import java.util.TimeZone;
  */
 @Service
 public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, ParkingOrder> implements IParkingOrderService {
-    @Resource
+    @Autowired
     private IParkingPlaceService parkingPlaceService;
-    @Resource
+    @Autowired
     private MqttClient mqttClient;
-    @Resource
+    @Autowired
     private Map<String, String> keyCache;
 
 
@@ -52,7 +54,7 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
         String key = KeyGenerator.generate();
         keyCache.put(macAddress, key);
         try {
-            mqttClient.publish("UnlockKey", new MqttMessage(key.getBytes()));
+            mqttClient.publish("UnlockKey", new MqttMessage((macAddress + ":" + key).getBytes()));
         } catch (Exception e) {
             e.printStackTrace();
         }

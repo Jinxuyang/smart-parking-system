@@ -4,6 +4,7 @@ import com.verge.parking.common.CommonResponse;
 import com.verge.parking.entity.User;
 import com.verge.parking.service.IUserService;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Resource
+    @Autowired
     private IUserService userService;
 
     @PostMapping("/register")

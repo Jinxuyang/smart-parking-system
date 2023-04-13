@@ -5,6 +5,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +22,9 @@ public class MQTTServer {
     int[] qos = {2, 2};
     String broker = "tcp://121.43.147.234:1883";
 
-    @Resource
+    @Autowired
     MQTTCallback mqttCallback = new MQTTCallback();
+
     @Bean
     public MqttClient getMQTTClient() {
 
@@ -59,5 +61,6 @@ public class MQTTServer {
         }
 
     }
+
 
 }

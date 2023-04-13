@@ -1,12 +1,10 @@
 package com.verge.parking.controller;
 
 import com.verge.parking.common.CommonResponse;
-import com.verge.parking.entity.ParkingOrder;
 import com.verge.parking.service.IParkingOrderService;
 import jakarta.annotation.Resource;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -16,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Verge
  * @since 2023-04-09
  */
-@Controller
+@RestController
 @RequestMapping("/parkingOrder")
 public class ParkingOrderController {
-    @Resource
+    @Autowired
     private IParkingOrderService parkingOrderService;
 
     @PostMapping("/order")
@@ -29,5 +27,10 @@ public class ParkingOrderController {
         } else {
             return CommonResponse.fail();
         }
+    }
+
+    @GetMapping("/unlockKey/{macAddress}")
+    public CommonResponse getUnlockKey(@PathVariable String macAddress) {
+        return CommonResponse.success(parkingOrderService.getUnlockKey(macAddress));
     }
 }
