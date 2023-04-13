@@ -21,7 +21,7 @@ public class ParkingPlaceServiceImpl extends ServiceImpl<ParkingPlaceMapper, Par
 
     @Override
     public boolean updateLockStatus(String macAddress, boolean isLock) {
-        ParkingPlace place = this.getOne(new QueryWrapper<ParkingPlace>().eq("device_mac_address", macAddress));
+        ParkingPlace place = this.getById(macAddress);
         if (place == null) {
             return false;
         }

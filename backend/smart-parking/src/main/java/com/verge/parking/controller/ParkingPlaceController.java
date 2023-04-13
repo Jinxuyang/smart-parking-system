@@ -29,7 +29,7 @@ public class ParkingPlaceController {
         return CommonResponse.success(parkingPlaceService.save(parkingPlace));
     }
 
-    @GetMapping()
+    @GetMapping("/")
     public CommonResponse get() {
         return CommonResponse.success(parkingPlaceService.list());
     }

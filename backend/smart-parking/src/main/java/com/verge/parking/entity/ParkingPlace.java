@@ -1,5 +1,6 @@
 package com.verge.parking.entity;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -22,9 +23,7 @@ public class ParkingPlace implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
-
-    private String deviceMacAddress;
+    private String id;
 
     private Boolean lockStatus;
 
