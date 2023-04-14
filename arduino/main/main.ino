@@ -117,7 +117,7 @@ void recvBluetoothMsg() {
 String packParkingInfo() {
     DynamicJsonDocument parkingStatus(1024);
     parkingStatus["macAddress"] = WiFi.macAddress();
-    parkingStatus["isLock"] = parkingLock.getLockStatus();
+    parkingStatus["lock"] = parkingLock.getLockStatus();
     parkingStatus["hasCar"] = detector.hasCar();
     parkingStatus["time"] = timeClient.getEpochTime();
     String msg;
