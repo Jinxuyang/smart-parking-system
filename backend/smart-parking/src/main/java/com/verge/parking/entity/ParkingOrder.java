@@ -1,6 +1,6 @@
 package com.verge.parking.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serial;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author Verge
@@ -22,6 +22,7 @@ public class ParkingOrder implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     private Integer userId;
@@ -36,9 +37,26 @@ public class ParkingOrder implements Serializable {
 
     private Integer fee;
 
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     private OrderStatus status;
+
+    @Override
+    public String toString() {
+        return "ParkingOrder{" +
+                "id = " + id +
+                ", userId = " + userId +
+                ", parkingPlaceId = " + parkingPlaceId +
+                ", startTime = " + startTime +
+                ", stopTime = " + stopTime +
+                ", fee = " + fee +
+                ", createTime = " + createTime +
+                ", updateTime = " + updateTime +
+                ", status = " + status +
+                "}";
+    }
 }

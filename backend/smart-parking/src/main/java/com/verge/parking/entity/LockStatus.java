@@ -1,13 +1,12 @@
 package com.verge.parking.entity;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import lombok.Getter;
+import com.baomidou.mybatisplus.annotation.IEnum;
 
-@Getter
-public enum LockStatus {
+
+public enum LockStatus implements IEnum<Boolean> {
     UNLOCK(false),
     LOCK(true);
-    @EnumValue
+
     final boolean lockStatus;
 
     LockStatus(boolean lockStatus) {
@@ -15,4 +14,8 @@ public enum LockStatus {
     }
 
 
+    @Override
+    public Boolean getValue() {
+        return lockStatus;
+    }
 }

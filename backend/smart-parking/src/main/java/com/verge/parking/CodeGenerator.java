@@ -29,7 +29,7 @@ public class CodeGenerator {
                             .pathInfo(Collections.singletonMap(OutputFile.xml, "C:\\Users\\Verge\\workspace")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("parking_place", "parking_order");
+                    builder.addInclude("parking_order");
                 })
                 .templateEngine(new FreemarkerTemplateEngine())
                 .execute();
