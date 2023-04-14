@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ParkingStatusMsg {
     private String macAddress;
-    private boolean isLock;
+    private boolean lock;
     private boolean hasCar;
     private long time;
 }

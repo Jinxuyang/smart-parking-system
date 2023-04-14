@@ -2,7 +2,6 @@ package com.verge.parking.controller;
 
 import com.verge.parking.common.CommonResponse;
 import com.verge.parking.service.IParkingOrderService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ public class ParkingOrderController {
     private IParkingOrderService parkingOrderService;
 
     @PostMapping("/order")
-    public CommonResponse order(Integer userId, String macAddress){
+    public CommonResponse reserve(String macAddress, Integer userId){
         if (parkingOrderService.reserve(macAddress, userId)) {
             return CommonResponse.success();
         } else {
@@ -29,8 +28,8 @@ public class ParkingOrderController {
         }
     }
 
-    @GetMapping("/unlockKey/{macAddress}")
-    public CommonResponse getUnlockKey(@PathVariable String macAddress) {
-        return CommonResponse.success(parkingOrderService.getUnlockKey(macAddress));
+    @GetMapping("/unlockKey/{orderId}")
+    public CommonResponse getUnlockKey(@PathVariable Integer orderId) {
+        return CommonResponse.success(parkingOrderService.getUnlockKey(orderId));
     }
 }

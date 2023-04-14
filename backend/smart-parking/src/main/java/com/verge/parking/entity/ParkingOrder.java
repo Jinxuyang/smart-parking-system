@@ -22,9 +22,13 @@ public class ParkingOrder implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private Integer id;
 
     private Integer userId;
+
+    private String parkingPlaceId;
+
+    private String unlockKey;
 
     private LocalDateTime startTime;
 

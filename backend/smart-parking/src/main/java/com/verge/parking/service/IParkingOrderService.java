@@ -13,11 +13,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IParkingOrderService extends IService<ParkingOrder> {
     boolean reserve(String macAddress, Integer userId);
-    boolean carIn(String macAddress, Long timestamp);
-    boolean carOut(String macAddress, Long timestamp);
+    boolean carIn(Integer id, Long timestamp);
+    boolean carOut(Integer id, Long timestamp);
 
     ParkingOrder getLatestOrder(String macAddress);
 
-    String getUnlockKey(String macAddress);
+    String getUnlockKey(Integer orderId);
 
 }

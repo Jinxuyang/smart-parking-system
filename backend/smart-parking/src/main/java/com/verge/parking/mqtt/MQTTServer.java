@@ -13,15 +13,16 @@ import java.util.Arrays;
 
 @Component
 public class MQTTServer {
-    String[] topic = {"ParkingStatus", "UnlockKey"};
+    String topic = "ParkingStatus";
 
     // qos 是服务质量的缩写，它是一个数字，代表了消息传递的可靠性。
     // 0 表示最多一次，也就是消息可能会丢失，但是不会重复传递。
     // 1 表示至少一次，也就是消息可能会重复传递，但是不会丢失。
     // 2 表示只有一次，也就是消息不会丢失，也不会重复传递。
-    int[] qos = {2, 2};
+    int qos = 2;
     String broker = "tcp://121.43.147.234:1883";
 
+    // TODO: 循环引用
     @Autowired
     MQTTCallback mqttCallback = new MQTTCallback();
 
@@ -47,7 +48,7 @@ public class MQTTServer {
             System.out.println("Connected to broker: " + broker);
             // 订阅 topic
             client.subscribe(topic, qos);
-            System.out.println("Subscribed to topic: " + Arrays.toString(topic));
+            System.out.println("Subscribed to topic: " + topic);
 
             return client;
         } catch (MqttException me) {

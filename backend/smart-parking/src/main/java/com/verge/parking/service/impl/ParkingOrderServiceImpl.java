@@ -9,11 +9,9 @@ import com.verge.parking.mapper.ParkingOrderMapper;
 import com.verge.parking.service.IParkingOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.verge.parking.service.IParkingPlaceService;
-import jakarta.annotation.Resource;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +50,6 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
         parkingPlaceService.updatePlaceStatusById(macAddress, ParkingPlaceStatus.OCCUPIED);
 
         String key = KeyGenerator.generate();
-        keyCache.put(macAddress, key);
         try {
             mqttClient.publish("UnlockKey", new MqttMessage((macAddress + ":" + key).getBytes()));
         } catch (Exception e) {
@@ -60,32 +57,33 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
         }
 
         ParkingOrder order = new ParkingOrder();
-        order.setId(macAddress);
+        order.setUnlockKey(key);
+        order.setParkingPlaceId(macAddress);
         order.setUserId(userId);
         order.setStatus(OrderStatus.WAITING);
         return this.save(order);
     }
 
     @Override
-    public boolean carIn(String macAddress, Long timestamp) {
-        ParkingOrder order = this.getById(macAddress);
+    public boolean carIn(Integer id, Long timestamp) {
+        ParkingOrder order = this.getById(id);
         order.setStatus(OrderStatus.PARKING);
         //convert timestamp to LocalDateTim
-        order.setStartTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
+        order.setStartTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp * 1000),
                 TimeZone.getDefault().toZoneId()));
         return this.updateById(order);
     }
 
     @Override
-    public boolean carOut(String macAddress, Long timestamp) {
-        ParkingOrder order = this.getById(macAddress);
+    public boolean carOut(Integer id, Long timestamp) {
+        ParkingOrder order = this.getById(id);
         order.setStatus(OrderStatus.WAITING_PAY);
         //convert timestamp to LocalDateTim
-        order.setStopTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp),
+        order.setStopTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp * 1000),
                 TimeZone.getDefault().toZoneId()));
         order.setFee(getFee(order.getStopTime().toEpochSecond(ZoneOffset.UTC) - order.getStartTime().toEpochSecond(ZoneOffset.UTC)));
 
-        parkingPlaceService.updatePlaceStatusById(macAddress, ParkingPlaceStatus.AVAILABLE);
+        parkingPlaceService.updatePlaceStatusById(order.getParkingPlaceId(), ParkingPlaceStatus.AVAILABLE);
         return this.updateById(order);
     }
 
@@ -93,14 +91,14 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
     public ParkingOrder getLatestOrder(String macAddress) {
         return this.getOne(
                 new QueryWrapper<ParkingOrder>()
-                        .eq("id", macAddress)
+                        .eq("parking_place_id", macAddress)
                         .orderByDesc("create_time")
         );
     }
 
     @Override
-    public String getUnlockKey(String macAddress) {
-        return keyCache.get(macAddress);
+    public String getUnlockKey(Integer orderId) {
+        return this.getById(orderId).getUnlockKey();
     }
 
     private int getFee(long time) {

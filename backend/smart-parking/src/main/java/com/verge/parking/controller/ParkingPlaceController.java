@@ -18,29 +18,24 @@ import org.springframework.stereotype.Controller;
  * @author Verge
  * @since 2023-04-09
  */
-@Controller
+@RestController
 @RequestMapping("/parkingPlace")
 public class ParkingPlaceController {
     @Autowired
     private IParkingPlaceService parkingPlaceService;
 
-    @PostMapping()
-    public CommonResponse add(@RequestBody ParkingPlace parkingPlace) {
-        return CommonResponse.success(parkingPlaceService.save(parkingPlace));
-    }
-
-    @GetMapping("/")
+    @GetMapping("/all")
     public CommonResponse get() {
         return CommonResponse.success(parkingPlaceService.list());
     }
 
     @GetMapping("/{id}")
-    public CommonResponse get(@PathVariable Integer id) {
+    public CommonResponse get(@PathVariable String id) {
         return CommonResponse.success(parkingPlaceService.getById(id));
     }
 
     @GetMapping("/status/{status}")
-    public CommonResponse getByStatus(@PathVariable ParkingPlaceStatus status) {
+    public CommonResponse getByStatus(@PathVariable Integer status) {
         return CommonResponse.success(parkingPlaceService.list(
                 new QueryWrapper<>(new ParkingPlace())
                         .eq("status", status)));

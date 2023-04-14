@@ -21,6 +21,7 @@ public class MQTTCallback implements MqttCallback {
     @Override
     public void connectionLost(Throwable cause) {
         System.out.println("connection lost：" + cause.getMessage());
+        cause.printStackTrace();
     }
 
     @Override
@@ -42,11 +43,14 @@ public class MQTTCallback implements MqttCallback {
             parkingPlaceService.updateLockStatus(macAddress, status.isLock());
 
             ParkingOrder order = parkingOrderService.getLatestOrder(macAddress);
+            if (order == null) {
+                return;
+            }
             // update order status
-            if (order.getStatus() == OrderStatus.WAITING && status.isHasCar() && status.isLock()) {
-                parkingOrderService.carIn(macAddress, status.getTime());
-            } else if (order.getStatus() == OrderStatus.PARKING && !status.isHasCar() && !status.isLock()) {
-                parkingOrderService.carOut(macAddress, status.getTime());
+            if (order.getStatus() == OrderStatus.WAITING && status.isHasCar() && !status.isLock()) {
+                parkingOrderService.carIn(order.getId(), status.getTime());
+            } else if (order.getStatus() == OrderStatus.PARKING && !status.isHasCar() && status.isLock()) {
+                parkingOrderService.carOut(order.getId(), status.getTime());
             }
 
             parkingOrderService.updateById(order);
