@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Verge
- * @since 2023-04-12
+ * @since 2023-04-14
  */
 @Data
 @TableName("parking_order")
@@ -22,7 +22,7 @@ public class ParkingOrder implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private Integer userId;
@@ -51,6 +51,7 @@ public class ParkingOrder implements Serializable {
                 "id = " + id +
                 ", userId = " + userId +
                 ", parkingPlaceId = " + parkingPlaceId +
+                ", unlockKey = " + unlockKey +
                 ", startTime = " + startTime +
                 ", stopTime = " + stopTime +
                 ", fee = " + fee +
