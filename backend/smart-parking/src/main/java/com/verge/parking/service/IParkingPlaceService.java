@@ -2,7 +2,7 @@ package com.verge.parking.service;
 
 import com.verge.parking.entity.ParkingPlace;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.verge.parking.entity.ParkingPlaceStatus;
+import com.verge.parking.entity.enums.ParkingPlaceStatus;
 
 /**
  * <p>

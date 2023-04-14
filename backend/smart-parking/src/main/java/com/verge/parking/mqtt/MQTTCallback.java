@@ -1,7 +1,7 @@
 package com.verge.parking.mqtt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.verge.parking.entity.OrderStatus;
+import com.verge.parking.entity.enums.OrderStatus;
 import com.verge.parking.entity.ParkingOrder;
 import com.verge.parking.service.IParkingOrderService;
 import com.verge.parking.service.IParkingPlaceService;
@@ -47,13 +47,13 @@ public class MQTTCallback implements MqttCallback {
                 return;
             }
             // update order status
-            if (order.getStatus() == OrderStatus.WAITING && status.isHasCar() && !status.isLock()) {
+            if (order.getOrderStatus() == OrderStatus.WAITING && status.isHasCar() && !status.isLock()) {
                 parkingOrderService.carIn(order.getId(), status.getTime());
-            } else if (order.getStatus() == OrderStatus.PARKING && !status.isHasCar() && status.isLock()) {
+            } else if (order.getOrderStatus() == OrderStatus.PARKING && !status.isHasCar() && status.isLock()) {
                 parkingOrderService.carOut(order.getId(), status.getTime());
             }
 
-            parkingOrderService.updateById(order);
+
         }
     }
 

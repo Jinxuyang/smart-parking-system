@@ -3,6 +3,7 @@ package com.verge.parking.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.verge.parking.entity.enums.ParkingPlaceStatus;
 import lombok.Data;
 
 import java.io.Serial;
@@ -41,18 +42,4 @@ public class ParkingPlace implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-
-    @Override
-    public String toString() {
-        return "ParkingPlace{" +
-                "id = " + id +
-                ", lockStatus = " + lockStatus +
-                ", area = " + area +
-                ", floor = " + floor +
-                ", number = " + number +
-                ", status = " + status +
-                ", createTime = " + createTime +
-                ", updateTime = " + updateTime +
-                "}";
-    }
 }

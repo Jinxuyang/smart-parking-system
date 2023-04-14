@@ -1,6 +1,7 @@
 package com.verge.parking.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.verge.parking.entity.enums.OrderStatus;
 import lombok.Data;
 
 import java.io.Serial;
@@ -37,27 +38,11 @@ public class ParkingOrder implements Serializable {
 
     private Integer fee;
 
+    private OrderStatus orderStatus;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-
-    private OrderStatus status;
-
-    @Override
-    public String toString() {
-        return "ParkingOrder{" +
-                "id = " + id +
-                ", userId = " + userId +
-                ", parkingPlaceId = " + parkingPlaceId +
-                ", unlockKey = " + unlockKey +
-                ", startTime = " + startTime +
-                ", stopTime = " + stopTime +
-                ", fee = " + fee +
-                ", createTime = " + createTime +
-                ", updateTime = " + updateTime +
-                ", status = " + status +
-                "}";
-    }
 }

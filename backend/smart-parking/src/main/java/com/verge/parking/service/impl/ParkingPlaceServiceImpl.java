@@ -1,8 +1,7 @@
 package com.verge.parking.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.verge.parking.entity.ParkingPlace;
-import com.verge.parking.entity.ParkingPlaceStatus;
+import com.verge.parking.entity.enums.ParkingPlaceStatus;
 import com.verge.parking.mapper.ParkingPlaceMapper;
 import com.verge.parking.service.IParkingPlaceService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -37,7 +36,8 @@ public class ParkingPlaceServiceImpl extends ServiceImpl<ParkingPlaceMapper, Par
 
     @Override
     public boolean updatePlaceStatusById(String macAddress, ParkingPlaceStatus status) {
-        ParkingPlace place = this.getById(macAddress);
+        ParkingPlace place = new ParkingPlace();
+        place.setId(macAddress);
         place.setStatus(status);
         return this.updateById(place);
     }

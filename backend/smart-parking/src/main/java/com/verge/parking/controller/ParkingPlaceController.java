@@ -3,12 +3,9 @@ package com.verge.parking.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.verge.parking.common.CommonResponse;
 import com.verge.parking.entity.ParkingPlace;
-import com.verge.parking.entity.ParkingPlaceStatus;
 import com.verge.parking.service.IParkingPlaceService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
 
 /**
  * <p>

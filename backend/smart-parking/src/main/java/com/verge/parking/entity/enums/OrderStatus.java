@@ -1,4 +1,4 @@
-package com.verge.parking.entity;
+package com.verge.parking.entity.enums;
 
 import com.baomidou.mybatisplus.annotation.IEnum;
 
