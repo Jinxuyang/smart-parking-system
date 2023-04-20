@@ -28,7 +28,7 @@
 			</view>
 			<uni-row>
 				<uni-icons type="checkmarkempty" size="20"></uni-icons>
-				数据更新时间：{{}}
+				数据更新时间：{{dataUpdateTime}}
 			</uni-row>
 		</uni-card>
 		<uni-card title="空闲车位数量变化">
@@ -72,9 +72,9 @@
 	import * as echarts from 'echarts/core';
 	import { TooltipComponent, GeoComponent } from 'echarts/components';
 	import { CanvasRenderer } from 'echarts/renderers';
-	
 	echarts.use([TooltipComponent, GeoComponent, CanvasRenderer]);
-	var takenSeatNames = ['A001'];
+	
+	var takenSeatNames = [];
 	export default {
 	    data() {
 	        return {
@@ -83,6 +83,8 @@
 				dialogType: "",
 				msgType: 'success',
 				messageText: '',
+				progressMSsg: "目前车位充足",
+				dataUpdateTime: "",
 				option: {
 				    tooltip: {},
 				    geo: {
@@ -118,7 +120,6 @@
 				      regions: this.makeTakenRegions(takenSeatNames)
 				    }
 				},
-				progressMSsg: "目前车位充足",
 				lineOpt: {
 					enableScroll: true,
 					xAxis: {
