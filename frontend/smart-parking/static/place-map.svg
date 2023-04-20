@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740.4 657.13">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 12px;
+      }
+
+      .cls-1, .cls-2 {
+        font-family: 'Dengxian';
+        font-weight: 300;
+        glyph-orientation-vertical: 0deg;
+        text-orientation: upright;
+        writing-mode: tb;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        font-size: 24px;
+      }
+    </style>
+  </defs>
+  <g id="_车位" data-name="车位">
+    <g name="A001">
+      <rect class="cls-3" x="45.8" y=".5" width="54" height="100"/>
+      <path d="M99.3,1V100H46.3V1h53m1-1H45.3V101h55V0h0Z"/>
+    </g>
+    <g name="A004">
+      <rect class="cls-3" x="237.8" y=".5" width="54" height="100"/>
+      <path d="M291.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A003">
+      <rect class="cls-3" x="173.8" y=".5" width="54" height="100"/>
+      <path d="M227.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A002">
+      <rect class="cls-3" x="109.8" y=".5" width="54" height="100"/>
+      <path d="M163.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A006">
+      <rect class="cls-3" x="429.8" y=".5" width="54" height="100"/>
+      <path d="M483.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A005">
+      <rect class="cls-3" x="301.8" y=".5" width="54" height="100"/>
+      <path d="M355.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A007">
+      <rect class="cls-3" x="493.8" y=".5" width="54" height="100"/>
+      <path d="M547.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A008">
+      <rect class="cls-3" x="557.8" y=".5" width="54" height="100"/>
+      <path d="M611.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A009">
+      <rect class="cls-3" x="621.8" y=".5" width="54" height="100"/>
+      <path d="M675.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A010">
+      <rect class="cls-3" x="685.8" y=".5" width="54" height="100"/>
+      <path d="M739.3,1V100h-53V1h53m1-1h-55V101h55V0h0Z"/>
+    </g>
+    <g name="A020">
+      <rect class="cls-3" x="45.8" y="205.5" width="54" height="100"/>
+      <path d="M99.3,206v99H46.3v-99h53m1-1H45.3v101h55v-101h0Z"/>
+    </g>
+    <g name="A017">
+      <rect class="cls-3" x="237.8" y="205.5" width="54" height="100"/>
+      <path d="M291.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A018">
+      <rect class="cls-3" x="173.8" y="205.5" width="54" height="100"/>
+      <path d="M227.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A019">
+      <rect class="cls-3" x="109.8" y="205.5" width="54" height="100"/>
+      <path d="M163.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A015">
+      <rect class="cls-3" x="429.8" y="205.5" width="54" height="100"/>
+      <path d="M483.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A016">
+      <rect class="cls-3" x="301.8" y="205.5" width="54" height="100"/>
+      <path d="M355.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A014">
+      <rect class="cls-3" x="493.8" y="205.5" width="54" height="100"/>
+      <path d="M547.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A013">
+      <rect class="cls-3" x="557.8" y="205.5" width="54" height="100"/>
+      <path d="M611.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A012">
+      <rect class="cls-3" x="621.8" y="205.5" width="54" height="100"/>
+      <path d="M675.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="A011">
+      <rect class="cls-3" x="685.8" y="205.5" width="54" height="100"/>
+      <path d="M739.3,206v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <line class="cls-4" x1="44.8" y1="118.5" x2="739.8" y2="118.5"/>
+    <rect class="cls-4" x="49.8" y="148.5" width="100" height="11"/>
+    <rect class="cls-4" x="228.8" y="148.5" width="100" height="11"/>
+    <rect class="cls-4" x="399.8" y="148.5" width="100" height="11"/>
+    <rect class="cls-4" x="571.8" y="148.5" width="100" height="11"/>
+    <line class="cls-4" x1="45.3" y1="190.5" x2="740.3" y2="190.5"/>
+    <g name="B001">
+      <rect class="cls-3" x="45.9" y="351.63" width="54" height="100"/>
+      <path d="M99.4,352.13v99H46.4v-99h53m1-1H45.4v101h55v-101h0Z"/>
+    </g>
+    <g name="B004">
+      <rect class="cls-3" x="237.9" y="351.63" width="54" height="100"/>
+      <path d="M291.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B003">
+      <rect class="cls-3" x="173.9" y="351.63" width="54" height="100"/>
+      <path d="M227.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B002">
+      <rect class="cls-3" x="109.9" y="351.63" width="54" height="100"/>
+      <path d="M163.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B006">
+      <rect class="cls-3" x="429.9" y="351.63" width="54" height="100"/>
+      <path d="M483.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B005">
+      <rect class="cls-3" x="301.9" y="351.63" width="54" height="100"/>
+      <path d="M355.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B007">
+      <rect class="cls-3" x="493.9" y="351.63" width="54" height="100"/>
+      <path d="M547.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B008">
+      <rect class="cls-3" x="557.9" y="351.63" width="54" height="100"/>
+      <path d="M611.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B009">
+      <rect class="cls-3" x="621.9" y="351.63" width="54" height="100"/>
+      <path d="M675.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B010">
+      <rect class="cls-3" x="685.9" y="351.63" width="54" height="100"/>
+      <path d="M739.4,352.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B020">
+      <rect class="cls-3" x="45.9" y="556.63" width="54" height="100"/>
+      <path d="M99.4,557.13v99H46.4v-99h53m1-1H45.4v101h55v-101h0Z"/>
+    </g>
+    <g name="B017">
+      <rect class="cls-3" x="237.9" y="556.63" width="54" height="100"/>
+      <path d="M291.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B018">
+      <rect class="cls-3" x="173.9" y="556.63" width="54" height="100"/>
+      <path d="M227.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B019">
+      <rect class="cls-3" x="109.9" y="556.63" width="54" height="100"/>
+      <path d="M163.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B015">
+      <rect class="cls-3" x="429.9" y="556.63" width="54" height="100"/>
+      <path d="M483.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B016">
+      <rect class="cls-3" x="301.9" y="556.63" width="54" height="100"/>
+      <path d="M355.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B014">
+      <rect class="cls-3" x="493.9" y="556.63" width="54" height="100"/>
+      <path d="M547.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B013">
+      <rect class="cls-3" x="557.9" y="556.63" width="54" height="100"/>
+      <path d="M611.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B012">
+      <rect class="cls-3" x="621.9" y="556.63" width="54" height="100"/>
+      <path d="M675.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <g name="B011">
+      <rect class="cls-3" x="685.9" y="556.63" width="54" height="100"/>
+      <path d="M739.4,557.13v99h-53v-99h53m1-1h-55v101h55v-101h0Z"/>
+    </g>
+    <line class="cls-4" x1="44.9" y1="469.63" x2="739.9" y2="469.63"/>
+    <rect class="cls-4" x="49.9" y="499.63" width="100" height="11"/>
+    <rect class="cls-4" x="228.9" y="499.63" width="100" height="11"/>
+    <rect class="cls-4" x="399.9" y="499.63" width="100" height="11"/>
+    <rect class="cls-4" x="571.9" y="499.63" width="100" height="11"/>
+    <line class="cls-4" x1="45.4" y1="541.63" x2="740.4" y2="541.63"/>
+  </g>
+  <g id="_文字" data-name="文字">
+    <text class="cls-2" transform="translate(12.28 127.16)"><tspan x="0" y="30">入口</tspan></text>
+    <text class="cls-2" transform="translate(12 484.21)"><tspan x="0" y="25">出口</tspan></text>
+    <text class="cls-1" transform="translate(73.06 25.77)"><tspan x="-13" y="0">A001</tspan></text>
+    <text class="cls-1" transform="translate(136.8 25.5)"><tspan x="-13" y="0">A002</tspan></text>
+    <text class="cls-1" transform="translate(201.09 25.02)"><tspan x="-13" y="0">A003</tspan></text>
+    <text class="cls-1" transform="translate(264.82 24.75)"><tspan x="-13" y="0">A004</tspan></text>
+    <text class="cls-1" transform="translate(329.3 25.19)"><tspan x="-13" y="0">A005</tspan></text>
+    <text class="cls-1" transform="translate(457.18 26.08)"><tspan x="-13" y="0">A006</tspan></text>
+    <text class="cls-1" transform="translate(520.91 25.82)"><tspan x="-13" y="0">A007</tspan></text>
+    <text class="cls-1" transform="translate(585.21 25.33)"><tspan x="-13" y="0">A008</tspan></text>
+    <text class="cls-1" transform="translate(648.94 25.07)"><tspan x="-13" y="0">A009</tspan></text>
+    <text class="cls-1" transform="translate(713.41 25.51)"><tspan x="-13" y="0">A010</tspan></text>
+    <text class="cls-1" transform="translate(73.04 230.85)"><tspan x="-13" y="0">A020</tspan></text>
+    <text class="cls-1" transform="translate(136.77 230.58)"><tspan x="-13" y="0">A019</tspan></text>
+    <text class="cls-1" transform="translate(201.07 230.1)"><tspan x="-13" y="0">A018</tspan></text>
+    <text class="cls-1" transform="translate(264.8 229.83)"><tspan x="-13" y="0">A017</tspan></text>
+    <text class="cls-1" transform="translate(329.27 230.28)"><tspan x="-13" y="0">A016</tspan></text>
+    <text class="cls-1" transform="translate(457.16 231.17)"><tspan x="-13" y="0">A015</tspan></text>
+    <text class="cls-1" transform="translate(520.89 230.9)"><tspan x="-13" y="0">A014</tspan></text>
+    <text class="cls-1" transform="translate(585.18 230.42)"><tspan x="-13" y="0">A013</tspan></text>
+    <text class="cls-1" transform="translate(648.92 230.15)"><tspan x="-13" y="0">A012</tspan></text>
+    <text class="cls-1" transform="translate(713.39 230.59)"><tspan x="-13" y="0">A011</tspan></text>
+    <text class="cls-1" transform="translate(73.05 375.9)"><tspan x="-13" y="0">B001</tspan></text>
+    <text class="cls-1" transform="translate(136.79 375.64)"><tspan x="-13" y="0">B002</tspan></text>
+    <text class="cls-1" transform="translate(201.08 375.15)"><tspan x="-13" y="0">B003</tspan></text>
+    <text class="cls-1" transform="translate(264.81 374.89)"><tspan x="-13" y="0">B004</tspan></text>
+    <text class="cls-1" transform="translate(329.29 375.33)"><tspan x="-13" y="0">B005</tspan></text>
+    <text class="cls-1" transform="translate(457.17 376.22)"><tspan x="-13" y="0">B006</tspan></text>
+    <text class="cls-1" transform="translate(520.9 375.95)"><tspan x="-13" y="0">B007</tspan></text>
+    <text class="cls-1" transform="translate(585.2 375.47)"><tspan x="-13" y="0">B008</tspan></text>
+    <text class="cls-1" transform="translate(648.93 375.2)"><tspan x="-13" y="0">B009</tspan></text>
+    <text class="cls-1" transform="translate(713.4 375.64)"><tspan x="-13" y="0">B010</tspan></text>
+    <text class="cls-1" transform="translate(73.03 580.99)"><tspan x="-13" y="0">B020</tspan></text>
+    <text class="cls-1" transform="translate(136.76 580.72)"><tspan x="-13" y="0">B019</tspan></text>
+    <text class="cls-1" transform="translate(201.05 580.24)"><tspan x="-13" y="0">B018</tspan></text>
+    <text class="cls-1" transform="translate(264.79 579.97)"><tspan x="-13" y="0">B017</tspan></text>
+    <text class="cls-1" transform="translate(329.26 580.41)"><tspan x="-13" y="0">B016</tspan></text>
+    <text class="cls-1" transform="translate(457.14 581.3)"><tspan x="-13" y="0">B015</tspan></text>
+    <text class="cls-1" transform="translate(520.88 581.04)"><tspan x="-13" y="0">B014</tspan></text>
+    <text class="cls-1" transform="translate(585.17 580.55)"><tspan x="-13" y="0">B013</tspan></text>
+    <text class="cls-1" transform="translate(648.9 580.29)"><tspan x="-13" y="0">B012</tspan></text>
+    <text class="cls-1" transform="translate(713.38 580.73)"><tspan x="-13" y="0">B011</tspan></text>
+  </g>
+</svg>
