@@ -15,16 +15,16 @@
 			<uni-row>
 				<uni-col :span="12">
 					<uni-icons type="fire" size="20"></uni-icons>
-					总车位数： 个
+					总车位数：{{totalPlace}}个
 				</uni-col>
 				<uni-col :span="12">
 					<uni-icons type="eye" size="20"></uni-icons>
-					空闲车位： 个
+					空闲车位：{{availablePlace}}个
 				</uni-col>
 			</uni-row>
 			<view style="margin-top: 10px;margin-bottom: 10px;">
-				<progress :percent="50" activeColor="#10AEFF" stroke-width="6" show-info="true"/>
-				<text>{{progressMSsg}}</text>
+				<progress :percent="this.placeProgress" activeColor="#10AEFF" stroke-width="6" show-info="true"/>
+				<text>{{progressMsg}}</text>
 			</view>
 			<uni-row>
 				<uni-icons type="checkmarkempty" size="20"></uni-icons>
@@ -61,7 +61,7 @@
 			</uni-popup>
 			
 			<uni-popup ref="alertDialog" type="dialog">
-				<uni-popup-dialog type="warn" cancelText="取消" confirmText="预定" title="确认" :content="dialogText" @confirm="dialogConfirm"
+				<uni-popup-dialog type="warn" cancelText="取消" confirmText="确认" title="确认" :content="dialogText" @confirm="dialogConfirm"
 					@close="dialogClose"></uni-popup-dialog>
 			</uni-popup>
 		</view>
@@ -69,21 +69,26 @@
 </template>
 
 <script>
+	import ajax from 'common/ajax.js'
+	
 	import * as echarts from 'echarts/core';
 	import { TooltipComponent, GeoComponent } from 'echarts/components';
 	import { CanvasRenderer } from 'echarts/renderers';
 	echarts.use([TooltipComponent, GeoComponent, CanvasRenderer]);
 	
-	var takenSeatNames = [];
 	export default {
 	    data() {
 	        return {
+				totalPlace: 0,
+				availablePlace: 0,
+				placeProgress: 0,
 				reserveMsg: "您还没有预约，快去预约吧！",
+				reservePlace: "",
 				dialogText: "",
 				dialogType: "",
 				msgType: 'success',
 				messageText: '',
-				progressMSsg: "目前车位充足",
+				progressMsg: "目前车位充足",
 				dataUpdateTime: "",
 				option: {
 				    tooltip: {},
@@ -117,7 +122,7 @@
 				          textBorderWidth: 2
 				        }
 				      },
-				      regions: this.makeTakenRegions(takenSeatNames)
+				      regions: []
 				    }
 				},
 				lineOpt: {
@@ -188,31 +193,58 @@
 			}
 	    },
 	    
-	    mounted() {},
+	    mounted() {
+			this.getReserveInfo()
+			this.getPlaceInfo()
+		},
 		methods: {
-			init() {
+			async init() {
 				this.$refs.chart.resize({width: 1000, height: 500})
+				
+				let takenPlaceNames
 				let that = this
+				
+				await ajax.get({
+					url: "/parkingPlace/status/1",
+				}).then(res => {
+					takenPlaceNames = res.data.data
+					let regions = [];
+					for (let i = 0; i < takenPlaceNames.length; i++) {
+					  regions.push({
+						name: takenPlaceNames[i],
+						silent: true,
+						itemStyle: {
+						  color: '#bf0e08'
+						},
+						emphasis: {
+						  itemStyle: {
+							borderColor: '#aaa',
+							borderWidth: 1
+						  }
+						},
+						select: {
+						  itemStyle: {
+							color: '#bf0e08'
+						  }
+						}
+					  });
+					}
+					
+					that.option.geo.regions = regions
+				})
+				
 				this.$refs.chart.init(echarts, chart => {
 					uni.request({
 						url:"static/place-map.svg",
 						method:'GET',
 						success: (svg) => {
-							console.log(svg.data)
 							echarts.registerMap('place-map', {
 								svg: svg.data
 							})
+							
 							chart.setOption(this.option);
 							chart.on('geoselectchanged', function (params) {
-								var selectedNames = params.allSelected[0].name.slice();
-										
-								// Remove taken seats.
-								for (var i = selectedNames.length - 1; i >= 0; i--) {
-									if (takenSeatNames.indexOf(selectedNames[i]) >= 0) {
-										selectedNames.splice(i, 1);
-									}
-								}
-								
+								let selectedNames = params.allSelected[0].name.slice();
 								that.showReserveDialog(selectedNames)
 							});
 						}
@@ -220,7 +252,7 @@
 				});
 			},
 			showUnlockDialog() {
-				this.dialogText = `您确定要解锁吗`
+				this.dialogText = `您确定要解锁${this.reservePlace}吗?`
 				this.dialogType = "unlock"
 				this.$refs.alertDialog.open()
 			},
@@ -231,30 +263,6 @@
 			},
 			unlock() {
 				// TODO 解锁
-			},
-			makeTakenRegions(takenSeatNames) {
-				var regions = [];
-				for (var i = 0; i < takenSeatNames.length; i++) {
-				  regions.push({
-					name: takenSeatNames[i],
-					silent: true,
-					itemStyle: {
-					  color: '#bf0e08'
-					},
-					emphasis: {
-					  itemStyle: {
-						borderColor: '#aaa',
-						borderWidth: 1
-					  }
-					},
-					select: {
-					  itemStyle: {
-						color: '#bf0e08'
-					  }
-					}
-				  });
-				}
-				return regions;
 			},
 			dialogConfirm() {
 				if(this.dialogType == "reserve") {
@@ -273,6 +281,42 @@
 				this.msgType = "warn"
 				this.messageText = "您已取消"
 				this.$refs.message.open()
+			},
+			getReserveInfo() {
+				ajax.get({
+					url: "/parkingOrder/reserve/1",
+				}).then(res => {
+					let info = res.data.data
+					if (info == null) {
+						this.reserveMsg = "您还没有预约，快去预约吧！"
+					} else {
+						this.reservePlace = info.parkingPlaceNum
+						if (info.orderStatus == 0) {
+							this.reserveMsg = `您已成功预约${this.reservePlace}，快去停车吧！解锁点击下方按钮。`
+						} else if (info.orderStatus == 1) {
+							this.reserveMsg = "您的车已停好。"
+						} else if (info.orderStatus == 2) {
+							this.reserveMsg = "您有一笔订单等待支付。"
+						}
+					}
+				})
+			},
+			getPlaceInfo() {
+				ajax.get({
+					url: "/parkingPlace/info"
+				}).then(res => {
+					let info = res.data.data
+					this.totalPlace = info.total
+					this.availablePlace = info.available
+					this.placeProgress = 100 - ((info.available / info.total) * 100)
+					if (this.placeProgress > 80) {
+						this.progressMsg = "目前车位紧张，请尽快预定"
+					} else {
+						this.progressMsg = "目前车位充足"
+					}
+					let myDate = new Date();
+					this.dataUpdateTime = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString()
+				})
 			}
 		}
 	}
