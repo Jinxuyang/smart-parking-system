@@ -31,29 +31,14 @@
 				数据更新时间：{{dataUpdateTime}}
 			</uni-row>
 		</uni-card>
-		<uni-card title="空闲车位数量变化">
-			<qiun-data-charts 
-			    type="line"
-			    :opts="lineOpt"
-			    :chartData="lineData"
-				:ontouch="true"
-			/>
-		</uni-card>
-		<uni-card title="热门车位">
+		<uni-card title="热点时间统计">
 			<qiun-data-charts 
 			    type="column"
 			    :opts="colOpt"
 			    :chartData="colData"
 			    :ontouch="true"
 			/>
-		</uni-card>
-		<uni-card title="热点时间统计">
-			<qiun-data-charts 
-			    type="mount"
-			    :opts="mountOpt"
-			    :chartData="mountData"
-			    :ontouch="true"
-			/>
+			{{colMsg}}
 		</uni-card>
 		<view>
 			<uni-popup ref="message" type="message">
@@ -125,27 +110,6 @@
 				      regions: []
 				    }
 				},
-				lineOpt: {
-					enableScroll: true,
-					xAxis: {
-					  itemCount: 4,
-					  scrollShow: true
-					},
-					extra: {
-					  line: {
-						type: "curve"
-					  }
-					}
-				},
-				lineData: {
-					categories: ["2018","2019","2020","2021","2022","2023","2024","2025","2026","2027"],
-					series: [
-					  {
-						name: "成交量A",
-						data: [35,8,25,37,4,20,10,10,20,30]
-					  }
-					]
-				},
 				colOpt: {
 					enableScroll: true,
 					xAxis: {
@@ -159,81 +123,68 @@
 					}
 				},
 				colData: {
-					categories: ["2018","2019","2020","2021","2022","2023","2018","2019","2020","2021","2022","2023"],
+					categories: ["0点","1点","2点","3点","4点","5点","6点","7点","8点","9点","10点","11点","12点","13点","14点","15点","16点","17点","18点","19点","20点","21点","22点","23点"],
 					series: [
 					  {
-						name: "目标值",
-						data: [35,36,31,33,13,34,35,36,31,33,13,34]
+						name: "停车数",
+						data: []
 					  }
 					]
 				},
 				colMsg: "",
-				mountOpt: {
-					enableScroll: true,
-					xAxis: {
-					  itemCount: 6,
-					  scrollShow: true
-					},
-					extra: {
-					  mount: {
-						type: "mount",
-						linearType: "opacity",
-						linearOpacity: 0.1
-					  }
-					}
-				},
-				mountData: {
-					series: [
-						{
-							data: [{"name":"一班","value":55},{"name":"二班","value":63},{"name":"三班","value":86},{"name":"四班","value":65},{"name":"五班","value":40}]
-						}
-					]
-				},
-				mountMsg: ""
 			}
 	    },
-	    
 	    mounted() {
+			this.getPopluarPeriod()
 			this.getReserveInfo()
 			this.getPlaceInfo()
 		},
 		methods: {
 			async init() {
-				this.$refs.chart.resize({width: 1000, height: 500})
+				this.$refs.chart.resize({width: 500, height: 500})
 				
-				let takenPlaceNames
 				let that = this
+				let regions = [];
+				
+				await ajax.get({
+					url: "/parkingPlace/popular"
+				}).then(res => {
+					let takenPlaceNames = res.data.data
+					console.log(takenPlaceNames)
+					for (let i = 0; i < takenPlaceNames.length; i++) {
+					  regions.push({
+						name: takenPlaceNames[i],
+						itemStyle: {
+						  color: '#0000ff'
+						}
+					  });
+					}
+				})
+				
 				
 				await ajax.get({
 					url: "/parkingPlace/status/1",
 				}).then(res => {
-					takenPlaceNames = res.data.data
-					let regions = [];
+					let takenPlaceNames = res.data.data
+					
 					for (let i = 0; i < takenPlaceNames.length; i++) {
 					  regions.push({
 						name: takenPlaceNames[i],
-						silent: true,
 						itemStyle: {
-						  color: '#bf0e08'
-						},
-						emphasis: {
-						  itemStyle: {
-							borderColor: '#aaa',
-							borderWidth: 1
-						  }
+						  color: '#ff0000'
 						},
 						select: {
 						  itemStyle: {
-							color: '#bf0e08'
+							color: '#ff0000'
 						  }
 						}
 					  });
 					}
-					
-					that.option.geo.regions = regions
 				})
 				
-				this.$refs.chart.init(echarts, chart => {
+				that.option.geo.regions = regions
+				console.log(regions)
+				await this.$refs.chart.init(echarts, chart => {
 					uni.request({
 						url:"static/place-map.svg",
 						method:'GET',
@@ -316,6 +267,22 @@
 					}
 					let myDate = new Date();
 					this.dataUpdateTime = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString()
+				})
+			},
+			getPopluarPeriod() {
+				ajax.get({
+					url: "/parkingOrder/popular/time"
+				}).then(res => {
+					let info = res.data.data
+					let max = 0;
+					for (let i = 0; i < info.length; i++) {
+						if (info[i] > max) {
+							max = info[i];
+							this.colMsg = `当前的热门时间为${i}点，建议您避开该时段`
+						}
+					}
+					console.log(info)
+					this.colData.series[0].data = info
 				})
 			}
 		}
