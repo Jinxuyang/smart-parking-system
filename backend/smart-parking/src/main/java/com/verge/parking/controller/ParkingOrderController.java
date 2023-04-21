@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Verge
  * @since 2023-04-09
  */
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/parkingOrder")
 public class ParkingOrderController {
