@@ -20,4 +20,6 @@ public interface IParkingOrderService extends IService<ParkingOrder> {
 
     String getUnlockKey(Integer orderId);
 
+    int[] getPopularHours();
+
 }

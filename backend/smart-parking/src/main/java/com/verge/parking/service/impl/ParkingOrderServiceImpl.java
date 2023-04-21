@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -100,6 +101,17 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
     @Override
     public String getUnlockKey(Integer orderId) {
         return this.getById(orderId).getUnlockKey();
+    }
+
+    @Override
+    public int[] getPopularHours() {
+        int[] timePeriod = new int[24];
+        List<ParkingOrder> list = this.list();
+        for (ParkingOrder order : list) {
+            LocalDateTime time = order.getStartTime();
+            timePeriod[time.getHour()]++;
+        }
+        return timePeriod;
     }
 
     private int getFee(long time) {
