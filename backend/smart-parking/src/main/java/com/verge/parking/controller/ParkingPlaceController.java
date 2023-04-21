@@ -2,6 +2,7 @@ package com.verge.parking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.verge.parking.common.CommonResponse;
+import com.verge.parking.controller.vo.PlaceInfo;
 import com.verge.parking.entity.ParkingPlace;
 import com.verge.parking.service.IParkingPlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,16 @@ public class ParkingPlaceController {
     @GetMapping("/{id}")
     public CommonResponse get(@PathVariable String id) {
         return CommonResponse.success(parkingPlaceService.getById(id));
+    }
+
+    @GetMapping("/info")
+    public CommonResponse getPlaceInfo() {
+        long total = parkingPlaceService.count();
+        long available = parkingPlaceService.count(new QueryWrapper<>(new ParkingPlace())
+                .eq("status", 0)
+        );
+        PlaceInfo info  = new PlaceInfo(total, available);
+        return CommonResponse.success(info);
     }
 
     @GetMapping("/status/{status}")
