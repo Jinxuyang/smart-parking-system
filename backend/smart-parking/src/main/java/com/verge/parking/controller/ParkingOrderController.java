@@ -47,8 +47,14 @@ public class ParkingOrderController {
         return CommonResponse.success(reserveInfo);
     }
     @PostMapping("/order")
-    public CommonResponse reserve(String macAddress, Integer userId){
-        if (parkingOrderService.reserve(macAddress, userId)) {
+    public CommonResponse reserve(@RequestParam("placeNum") String placeNum, @RequestParam("userId") Integer userId){
+        String area = placeNum.substring(0, 1);
+        Integer number = Integer.valueOf(placeNum.substring(1));
+        ParkingPlace place = parkingPlaceService.getOne(new QueryWrapper<>(new ParkingPlace())
+                .eq("area", area)
+                .eq("number", number)
+        );
+        if (parkingOrderService.reserve(place.getId(), userId)) {
             return CommonResponse.success();
         } else {
             return CommonResponse.fail();
