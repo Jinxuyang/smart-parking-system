@@ -106,7 +106,9 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
     @Override
     public int[] getPopularHours() {
         int[] timePeriod = new int[24];
-        List<ParkingOrder> list = this.list();
+        List<ParkingOrder> list = this.list(new QueryWrapper<>(new ParkingOrder())
+                .eq("order_status", "3")
+        );
         for (ParkingOrder order : list) {
             LocalDateTime time = order.getStartTime();
             timePeriod[time.getHour()]++;

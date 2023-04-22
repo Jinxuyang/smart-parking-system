@@ -33,6 +33,8 @@ public class ParkingOrderController {
         ParkingOrder order = parkingOrderService.getOne(new QueryWrapper<>(new ParkingOrder())
                 .eq("user_id", userId)
                 .ne("order_status", OrderStatus.FINISHED.getValue())
+                .orderByDesc("create_time")
+                .last("limit 1")
         );
         if (order == null) {
             // 没有预约
@@ -42,7 +44,7 @@ public class ParkingOrderController {
 
         ReserveInfo reserveInfo = new ReserveInfo();
         reserveInfo.setOrderStatus(order.getOrderStatus().getValue());
-        reserveInfo.setParkingPlaceNum(place.getArea() + String.format("%02x", place.getNumber()));
+        reserveInfo.setParkingPlaceNum(place.getArea() + String.format("%03d", place.getNumber()));
 
         return CommonResponse.success(reserveInfo);
     }
