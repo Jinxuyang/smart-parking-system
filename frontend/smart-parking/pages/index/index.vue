@@ -1,6 +1,7 @@
 <template>
 	<view class="uni-container">
-		<view><l-echart ref="chart" @finished="init"></l-echart></view>
+		<uni-notice-bar single  color="#2979FF" background-color="#EAF2FF" show-close text="红色: 车位已被占用 蓝色: 推荐车位 绿色: 当前选中车位" />
+		<view><l-echart ref="chart" @finished="init"></l-echart></view>	
 		<uni-card :is-shadow="true" title="预约信息">
 			{{reserveMsg}}
 			<view slot="actions" style="margin-left: 10px;margin-bottom: 10px;">
@@ -64,6 +65,7 @@
 	export default {
 	    data() {
 	        return {
+				selectedPlace: "",
 				totalPlace: 0,
 				availablePlace: 0,
 				placeProgress: 0,
@@ -196,6 +198,7 @@
 							chart.setOption(this.option);
 							chart.on('geoselectchanged', function (params) {
 								let selectedNames = params.allSelected[0].name.slice();
+								that.selectedPlace = selectedNames[0]
 								that.showReserveDialog(selectedNames)
 							});
 						}
@@ -217,10 +220,23 @@
 			},
 			dialogConfirm() {
 				if(this.dialogType == "reserve") {
-					//TODO
-					this.msgType = "success"
-					this.messageText = "您已成功预约"
-					this.$refs.message.open()
+					ajax.post({
+						url: "/parkingOrder/order",
+						header: {
+							"Content-type":"application/x-www-form-urlencoded"
+						},
+						data: {
+							userId: 1,
+							placeNum: this.selectedPlace
+						}
+					}).then(res => {
+						let code = res.data.code
+						if (code == "200") {
+							this.msgType = "success"
+							this.messageText = "您已成功预约"
+							this.$refs.message.open()
+						}
+					})	
 				} else {
 					//TODO
 					this.msgType = "success"
