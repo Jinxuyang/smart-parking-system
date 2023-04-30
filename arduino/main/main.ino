@@ -20,18 +20,19 @@ const byte TX = D5;
 SoftwareSerial EEBlue(RX, TX);
 
 // innit wifi and mqtt
-WiFiClient espClient;
+WiFiClientSecure espClient;
 PubSubClient client(espClient);
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, 8 * 3600);
 
+const char* fingerprint = "7E:52:D3:84:48:3C:5A:9F:A4:39:9A:8B:27:01:B1:F8:C6:AD:D4:47";
 
 const char* ssid = "SEXBABY";
 const char* password = "204204204";
 
-const char* mqtt_server = "121.43.147.234";
-const int mqtt_port = 1883;
+const char* mqtt_server = "n4d7f818.ala.cn-hangzhou.emqxsl.cn";
+const int mqtt_port = 8883;
 const char *mqtt_username = "verge";
 const char *mqtt_password = "123456";
 
@@ -129,6 +130,7 @@ void setup () {
     Serial.begin(115200);  
     EEBlue.begin(9600); 
 
+    espClient.setFingerprint(fingerprint);
     client.setServer(mqtt_server, mqtt_port);
     client.setCallback(callback);
 
