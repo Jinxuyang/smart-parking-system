@@ -95,6 +95,7 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
                 new QueryWrapper<ParkingOrder>()
                         .eq("parking_place_id", macAddress)
                         .orderByDesc("create_time")
+                        .last("limit 1")
         );
     }
 

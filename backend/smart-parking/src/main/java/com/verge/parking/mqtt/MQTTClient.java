@@ -1,6 +1,5 @@
 package com.verge.parking.mqtt;
 
-import jakarta.annotation.Resource;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -9,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Component
-public class MQTTServer {
+public class MQTTClient {
     String topic = "ParkingStatus";
 
     // qos 是服务质量的缩写，它是一个数字，代表了消息传递的可靠性。
@@ -20,7 +17,7 @@ public class MQTTServer {
     // 1 表示至少一次，也就是消息可能会重复传递，但是不会丢失。
     // 2 表示只有一次，也就是消息不会丢失，也不会重复传递。
     int qos = 2;
-    String broker = "tcp://121.43.147.234:1883";
+    String broker = "ssl://n4d7f818.ala.cn-hangzhou.emqxsl.cn:8883";
 
     // TODO: 循环引用
     @Autowired
