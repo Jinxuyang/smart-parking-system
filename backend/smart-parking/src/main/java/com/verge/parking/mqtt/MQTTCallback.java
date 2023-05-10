@@ -52,8 +52,6 @@ public class MQTTCallback implements MqttCallback {
             } else if (order.getOrderStatus() == OrderStatus.PARKING && !status.isHasCar() && status.isLock()) {
                 parkingOrderService.carOut(order.getId(), status.getTime());
             }
-
-
         }
     }
 

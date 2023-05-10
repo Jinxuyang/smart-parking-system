@@ -47,8 +47,7 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
 
         String key = KeyGenerator.generate();
         try {
-            // TODO TEST
-            mqttClient.publish("UnlockKey", new MqttMessage((macAddress + ":" + "1234567890").getBytes()));
+            mqttClient.publish("UnlockKey", new MqttMessage((macAddress + ":" + key).getBytes()));
         } catch (Exception e) {
             e.printStackTrace();
         }
