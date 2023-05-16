@@ -37,7 +37,7 @@ const char *mqtt_username = "verge";
 const char *mqtt_password = "123456";
 
 const char* parkingStatusTopic = "ParkingStatus";
-const char* unlockKeyTopic = "UnlockKey";
+const char* controlTopic = "Control";
 
 unsigned long lockTick = 0;
 
@@ -57,9 +57,7 @@ void connectToMQTT() {
 
     if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
         Serial.println("MQTT connected");
-
-        // subscribe to unlock key topic
-        client.subscribe(unlockKeyTopic);
+        client.subscribe(controlTopic);
     }
     else {
         Serial.print("MQTT failed, rc=");
@@ -80,13 +78,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
     mqtt_buff += (char)payload[i];
   }
   Serial.println(mqtt_buff);
-  
-  if (mqtt_buff.startsWith(WiFi.macAddress())) {
-    String key = mqtt_buff.substring(18, 28);
-    Serial.print("Get key: ");
-    Serial.println(key);
-    parkingLock.setLockKey(key);
-    Serial.print("unlock key set");
+  if (mqtt_buff.startsWith(WiFi.macAddress()) && topic == "Control") {
+    String cmd = mqtt_buff.substring(18);
+    if (cmd == "lock") {
+      parkingLock.turnLock();
+    } else if (cmd == "unlock") {
+      parkingLock.closeLock();
+    }
   }
   
   mqtt_buff = "";

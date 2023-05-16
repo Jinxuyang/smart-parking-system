@@ -1,13 +1,20 @@
 <template>
 	<view class="uni-container">
 		<uni-notice-bar single  color="#2979FF" background-color="#EAF2FF" show-close text="红色: 车位已被占用 蓝色: 推荐车位 绿色: 当前选中车位" />
-		<view><l-echart ref="chart" @finished="init"></l-echart></view>	
+		<view style="width: 100%;">
+			<l-echart ref="chart" @finished="init"></l-echart>
+		</view>	
 		<uni-card :is-shadow="true" title="预约信息">
 			{{reserveMsg}}
 			<view slot="actions" style="margin-left: 10px;margin-bottom: 10px;">
 				<view @click="showUnlockDialog()">
 					<uni-icons type="checkbox-filled" size="20"></uni-icons>
 					<text style="font-size: 15px;margin-left: 5px;">去解锁</text>
+				</view>
+				</br>
+				<view @click="toPay()">
+					<uni-icons type="wallet-filled" size="20"></uni-icons>
+					<text style="font-size: 15px;margin-left: 5px;">去支付</text>
 				</view>
 			</view>
 		</uni-card>
@@ -65,6 +72,7 @@
 	export default {
 	    data() {
 	        return {
+				orderId: null,
 				selectedPlace: "",
 				totalPlace: 0,
 				availablePlace: 0,
@@ -134,6 +142,11 @@
 			this.getPlaceInfo()
 		},
 		methods: {
+			toPay() {
+				uni.navigateTo({
+					url: "/pages/pay/pay" + "?orderId=" + this.orderId
+				})
+			},
 			async init() {
 				this.$refs.chart.resize({width: 500, height: 500})
 				
@@ -208,7 +221,30 @@
 				this.$refs.alertDialog.open()
 			},
 			unlock() {
-				// TODO 解锁
+				ajax.get({
+					url: "/parkingOrder/unlockKey/" + this.orderId,
+				}).then(res => {
+					let code = res.data.code
+					if (code == "200") {
+						let key = res.data.data
+						ajax.post({
+							url: "/parkingOrder/unlock/" + key
+						}).then(res => {
+							let code = res.data.code
+							if (code == "200") {
+								this.msgType = "success"
+								this.messageText = "您已成功解锁"
+								this.$refs.message.open()
+							} else {
+								this.msgType = "warn"
+								this.messageText = "解锁失败"
+								this.$refs.message.open()
+							}
+						})
+					}
+				})
+				
+				
 			},
 			dialogConfirm() {
 				if(this.dialogType == "reserve") {
@@ -230,10 +266,7 @@
 						}
 					})	
 				} else {
-					//TODO
-					this.msgType = "success"
-					this.messageText = "您已成功解锁"
-					this.$refs.message.open()
+					this.unlock()
 				}
 			},
 			dialogClose() {
@@ -257,6 +290,7 @@
 						} else if (info.orderStatus == 2) {
 							this.reserveMsg = "您有一笔订单等待支付。"
 						}
+						this.orderId = info.orderId
 					}
 				})
 			},
