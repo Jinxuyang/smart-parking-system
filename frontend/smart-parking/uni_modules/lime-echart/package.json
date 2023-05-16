@@ -1,7 +1,7 @@
 {
   "id": "lime-echart",
   "displayName": "echarts",
-  "version": "0.6.9",
+  "version": "0.7.1",
   "description": "echarts 全端兼容，一款使echarts图表能跑在uniapp各端中的插件",
   "keywords": [
     "echarts",

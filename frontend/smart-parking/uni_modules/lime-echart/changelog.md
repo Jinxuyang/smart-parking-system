@@ -1,3 +1,8 @@
+## 0.7.1（2023-04-26）
+- chore: 更新demo，使用`lime-echart`这个标签即可查看示例
+- chore：微信小程序的`tooltip`文字有阴影，怀疑是微信的锅，临时解决方法是`tooltip.shadowBlur = 0`
+## 0.7.0（2023-04-24）
+- fix: 修复`setAttribute is not a function`
 ## 0.6.9（2023-04-15）
 - chore: 更新文档，vue3请使用echarts esm的包
 ## 0.6.8（2023-03-22）

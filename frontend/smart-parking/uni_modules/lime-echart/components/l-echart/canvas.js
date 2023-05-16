@@ -133,6 +133,11 @@ export class Canvas {
 			return this.ctx;
 		}
 	}
+	setAttribute(key, value) {
+		if(key === 'aria-label') {
+			this.com['ariaLabel'] = value
+		}
+	}
 	setChart(chart) {
 		this.chart = chart;
 	}

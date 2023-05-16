@@ -207,6 +207,11 @@ this.$refs.chart.resize()
 this.$refs.chart.resize({width: 375, height: 375})
 ```
 
+## 插件标签
+- 默认 l-echart 为 component
+- 默认 lime-echart 为 demo
+
+
 
 ## 常见问题
 - 微信小程序 `2d` 只支持 真机调试2.0

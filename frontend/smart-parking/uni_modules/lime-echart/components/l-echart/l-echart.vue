@@ -1,5 +1,5 @@
 <template>
-	<view class="lime-echart" :style="customStyle" v-if="canvasId" ref="limeEchart">
+	<view class="lime-echart" :style="customStyle" v-if="canvasId" ref="limeEchart" :aria-label="ariaLabel">
 		<!-- #ifndef APP-NVUE -->
 		<canvas
 			class="lime-echart__canvas"
@@ -102,6 +102,7 @@ export default {
 			// #ifndef MP-WEIXIN || MP-TOUTIAO || MP-ALIPAY
 			use2dCanvas: false,
 			// #endif
+			ariaLabel: '图表',
 			width: null,
 			height: null,
 			nodeWidth: null,
@@ -133,6 +134,7 @@ export default {
 			return  this.width && this.height ? ('width:' + this.width + 'px;height:' + this.height + 'px') : ''
 		}
 	},
+	// #ifndef VUE3
 	beforeDestroy() {
 		this.clear()
 		this.dispose()
@@ -142,6 +144,18 @@ export default {
 		}
 		// #endif
 	},
+	// #endif
+	// #ifdef VUE3
+	unmounted() {
+		this.clear()
+		this.dispose()
+		// #ifdef H5
+		if(this.isPc) {
+			document.removeEventListener('mousewheel', this.mousewheel)
+		}
+		// #endif
+	},
+	// #endif
 	created() {
 		// #ifdef H5
 		if(!('ontouchstart' in window)) {

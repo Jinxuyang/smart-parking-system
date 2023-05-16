@@ -1,5 +1,6 @@
+
 server:
-  port: 8081
+  port: 5678
   servlet:
     context-path: /smart_parking
 spring:
@@ -10,6 +11,9 @@ spring:
     username: root
     password: 123456
     url: jdbc:mysql://localhost:3306/smart_parking?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  web:
+    resources:
+      static-locations: classpath:/static/
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
