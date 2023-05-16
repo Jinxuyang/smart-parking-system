@@ -10,7 +10,9 @@ import com.verge.parking.mapper.ParkingOrderMapper;
 import com.verge.parking.service.IParkingOrderService;
 import com.verge.parking.service.IParkingPlaceService;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,12 +48,6 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
         parkingPlaceService.updatePlaceStatusById(macAddress, ParkingPlaceStatus.OCCUPIED);
 
         String key = KeyGenerator.generate();
-        try {
-            mqttClient.publish("UnlockKey", new MqttMessage((macAddress + ":" + key).getBytes()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         ParkingOrder order = new ParkingOrder();
         order.setUnlockKey(key);
         order.setParkingPlaceId(macAddress);
@@ -114,6 +110,30 @@ public class ParkingOrderServiceImpl extends ServiceImpl<ParkingOrderMapper, Par
             timePeriod[time.getHour()]++;
         }
         return timePeriod;
+    }
+
+    @Override
+    public void payOrder(Integer orderId) {
+        ParkingOrder order = this.getById(orderId);
+        order.setOrderStatus(OrderStatus.FINISHED);
+        this.updateById(order);
+    }
+
+    @Override
+    public boolean unlockPlace(String key) {
+        ParkingOrder order = this.getOne(new QueryWrapper<>(new ParkingOrder())
+                .eq("unlock_key", key)
+        );
+        if (order == null || order.getOrderStatus() == OrderStatus.FINISHED) {
+            return false;
+        }
+        String cmd = order.getParkingPlaceId() + ":" + "unlock";
+        try {
+            mqttClient.publish("Control", new MqttMessage(cmd.getBytes()));
+        } catch (MqttException e) {
+            return false;
+        }
+        return true;
     }
 
     private int getFee(long time) {

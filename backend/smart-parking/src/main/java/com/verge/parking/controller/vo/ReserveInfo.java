@@ -6,4 +6,5 @@ import lombok.Data;
 public class ReserveInfo {
     public Integer orderStatus;
     public String parkingPlaceNum;
+    public Integer orderId;
 }

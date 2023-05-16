@@ -45,6 +45,7 @@ public class ParkingOrderController {
         ReserveInfo reserveInfo = new ReserveInfo();
         reserveInfo.setOrderStatus(order.getOrderStatus().getValue());
         reserveInfo.setParkingPlaceNum(place.getArea() + String.format("%03d", place.getNumber()));
+        reserveInfo.setOrderId(order.getId());
 
         return CommonResponse.success(reserveInfo);
     }
@@ -77,7 +78,7 @@ public class ParkingOrderController {
     }
 
     @PutMapping("/pay/{orderId}")
-    public CommonResponse pay(@RequestParam("orderId") int orderId) {
+    public CommonResponse pay(@PathVariable("orderId") Integer orderId) {
         ParkingOrder order = parkingOrderService.getById(orderId);
         if (order == null) {
             return CommonResponse.fail("订单不存在");
@@ -97,5 +98,14 @@ public class ParkingOrderController {
     public CommonResponse getPopularTimePeriod() {
         int[] popularHours = parkingOrderService.getPopularHours();
         return CommonResponse.success(popularHours);
+    }
+
+    @PostMapping("/unlock/{key}")
+    public CommonResponse unlockPlace(@PathVariable("key") String key) {
+        if (parkingOrderService.unlockPlace(key)) {
+            return CommonResponse.success();
+        } else {
+            return CommonResponse.fail();
+        }
     }
 }
