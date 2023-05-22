@@ -46,6 +46,7 @@ public class ParkingOrderController {
         reserveInfo.setOrderStatus(order.getOrderStatus().getValue());
         reserveInfo.setParkingPlaceNum(place.getArea() + String.format("%03d", place.getNumber()));
         reserveInfo.setOrderId(order.getId());
+        reserveInfo.setPlace(place);
 
         return CommonResponse.success(reserveInfo);
     }

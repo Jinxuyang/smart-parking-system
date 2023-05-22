@@ -37,6 +37,12 @@ public class ParkingPlace implements Serializable {
 
     private ParkingPlaceStatus status;
 
+    private String BLEDeviceId;
+
+    private String BLEServiceId;
+
+    private String BLECharacteristicId;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
