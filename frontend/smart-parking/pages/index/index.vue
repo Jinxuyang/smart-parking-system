@@ -72,6 +72,7 @@
 	export default {
 	    data() {
 	        return {
+				deviceId: "",
 				orderId: null,
 				selectedPlace: "",
 				totalPlace: 0,
@@ -221,30 +222,54 @@
 				this.$refs.alertDialog.open()
 			},
 			unlock() {
-				ajax.get({
-					url: "/parkingOrder/unlockKey/" + this.orderId,
-				}).then(res => {
-					let code = res.data.code
-					if (code == "200") {
-						let key = res.data.data
-						ajax.post({
-							url: "/parkingOrder/unlock/" + key
-						}).then(res => {
-							let code = res.data.code
-							if (code == "200") {
-								this.msgType = "success"
-								this.messageText = "您已成功解锁"
-								this.$refs.message.open()
-							} else {
-								this.msgType = "warn"
-								this.messageText = "解锁失败"
-								this.$refs.message.open()
-							}
+				let that = this
+				uni.openBluetoothAdapter({
+				    success(res) {
+				        console.log('初始化蓝牙成功')
+						uni.startBluetoothDevicesDiscovery({
+						    success(res) {
+						        console.log('开始搜索')
+						        
+						        // 开启监听回调
+						        uni.onBluetoothDeviceFound(device => {
+									if (device.devices[0].deviceId === that.deviceId) {
+										console.log("找到设备")
+										ajax.get({
+											url: "/parkingOrder/unlockKey/" + this.orderId,
+										}).then(res => {
+											let code = res.data.code
+											if (code == "200") {
+												let key = res.data.data
+												ajax.post({
+													url: "/parkingOrder/unlock/" + key
+												}).then(res => {
+													let code = res.data.code
+													if (code == "200") {
+														this.msgType = "success"
+														this.messageText = "您已成功解锁"
+														this.$refs.message.open()
+													} else {
+														this.msgType = "warn"
+														this.messageText = "解锁失败"
+														this.$refs.message.open()
+													}
+												})
+											}
+										})
+									}
+								})
+						    },
+						    fail(err) {
+						        console.log('搜索失败')
+						        console.error(err)
+						    }
 						})
-					}
+				    },
+				    fail(err) {
+				        console.log('初始化蓝牙失败')
+				        console.error(err)
+				    }
 				})
-				
-				
 			},
 			dialogConfirm() {
 				if(this.dialogType == "reserve") {
@@ -291,6 +316,7 @@
 							this.reserveMsg = "您有一笔订单等待支付。"
 						}
 						this.orderId = info.orderId
+						this.deviceId = info.place.BLEDeviceId
 					}
 				})
 			},
