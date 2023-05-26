@@ -1,6 +1,8 @@
 package com.verge.parking.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,6 +16,8 @@ import java.io.Serializable;
  * @since 2023-04-14
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
 
     @Serial

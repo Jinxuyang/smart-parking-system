@@ -27,9 +27,18 @@ public class UserController {
     public CommonResponse register(String username, String password) {
         User user = new User(username ,password);
         if (userService.register(user)) {
-            return CommonResponse.success();
+            return CommonResponse.success("注册成功");
         } else {
             return CommonResponse.fail();
+        }
+    }
+
+    @PostMapping("/login")
+    public CommonResponse login(String username, String password) {
+        if (userService.login(username, password)) {
+            return CommonResponse.success("登录成功");
+        } else {
+            return CommonResponse.fail("登录失败");
         }
     }
 }
