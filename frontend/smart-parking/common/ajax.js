@@ -6,13 +6,15 @@ import ajax from '@/uni_modules/u-ajax'
 // 创建请求实例
 const instance = ajax.create({
   // 初始配置
-  baseURL: 'http://i4sj36.natappfree.cc/smart_parking'
+  baseURL: 'http://pbkv2t.natappfree.cc/smart_parking',
 })
 
 // 添加请求拦截器
 instance.interceptors.request.use(
   config => {
-    // 在发送请求前做些什么
+	config.header = {
+		"Authorization": uni.getStorageSync("token")
+	}
     return config
   },
   error => {
@@ -24,11 +26,22 @@ instance.interceptors.request.use(
 // 添加响应拦截器
 instance.interceptors.response.use(
   response => {
+	  
     // 对响应数据做些什么
     return response
   },
   error => {
-    // 对响应错误做些什么
+	 if(error.statusCode == "403") {
+	 		  uni.showToast({
+	 		  	title: '您还未登录，请登录',
+	 		  	icon: 'none',
+	 			success() {
+	 				uni.navigateTo({
+	 				  url: '/pages/login/login'
+	 				})
+	 			}
+	 		  })
+	 }
     return Promise.reject(error)
   }
 )

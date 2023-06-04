@@ -5,12 +5,19 @@
 			"style": {
 				"navigationBarTitleText": "停车推荐系统"
 			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "用户登录",
+				"enablePullDownRefresh": false
+			}
 		}
         ,{
             "path" : "pages/pay/pay",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "支付停车费",
                 "enablePullDownRefresh": false
             }
             
@@ -20,6 +27,15 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        },
+		{
+            "path" : "pages/register/register",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "用户注册",
                 "enablePullDownRefresh": false
             }
             
