@@ -9,7 +9,7 @@
 			<view slot="actions" style="margin-left: 10px;margin-bottom: 10px;">
 				<view @click="showUnlockDialog()">
 					<uni-icons type="checkbox-filled" size="20"></uni-icons>
-					<text style="font-size: 15px;margin-left: 5px;">去解锁</text>
+					<text style="font-size: 15px;margin-left: 5px;">去开/关锁</text>
 				</view>
 				</br>
 				<view @click="toPay()">
@@ -54,8 +54,7 @@
 			</uni-popup>
 			
 			<uni-popup ref="alertDialog" type="dialog">
-				<uni-popup-dialog type="warn" cancelText="取消" confirmText="确认" title="确认" :content="dialogText" @confirm="dialogConfirm"
-					@close="dialogClose"></uni-popup-dialog>
+				<uni-popup-dialog type="warn" cancelText="取消" confirmText="确认" title="确认" :content="dialogText" @confirm="dialogConfirm" @close="dialogClose" :loading="loading"></uni-popup-dialog>
 			</uni-popup>
 		</view>
 	</view>
@@ -72,6 +71,8 @@
 	export default {
 	    data() {
 	        return {
+				orderStatus: null,
+				loading: false,
 				deviceId: "",
 				orderId: null,
 				selectedPlace: "",
@@ -212,8 +213,13 @@
 				});
 			},
 			showUnlockDialog() {
-				this.dialogText = `您确定要解锁${this.reservePlace}吗?`
-				this.dialogType = "unlock"
+				if(this.orderStatus == 0) {
+					this.dialogText = `您确定要解锁${this.reservePlace}吗?`
+					this.dialogType = "unlock"
+				} else if (this.orderStatus == 1) {
+					this.dialogText = `您确定要关锁${this.reservePlace}吗?`
+					this.dialogType = "lock"
+				}
 				this.$refs.alertDialog.open()
 			},
 			showReserveDialog(selectedNames) {
@@ -222,66 +228,70 @@
 				this.$refs.alertDialog.open()
 			},
 			unlock() {
-				let that = this
-				uni.openBluetoothAdapter({
-				    success(res) {
-				        console.log('初始化蓝牙成功')
-						uni.startBluetoothDevicesDiscovery({
-						    success(res) {
-						        console.log('开始搜索')
+				ajax.post({
+					url: "/parkingOrder/unlock/" + this.orderId
+				}).then(res => {
+					let code = res.data.code
+					if (code == "200") {
+						this.msgType = "success"
+						this.messageText = "您已成功解锁"
+						this.$refs.message.open()
+						this.getReserveInfo()
+					} else {
+						this.msgType = "warn"
+						this.messageText = "解锁失败"
+						this.$refs.message.open()
+					}
+				})
+				// let that = this
+				// uni.openBluetoothAdapter({
+				//     success(res) {
+				//         console.log('初始化蓝牙成功')
+				// 		uni.startBluetoothDevicesDiscovery({
+				// 		    success(res) {
+				// 		        console.log('开始搜索')
 						        
-						        // 开启监听回调
-						        uni.onBluetoothDeviceFound(device => {
-									if (device.devices[0].deviceId === that.deviceId) {
-										console.log("找到设备")
-										ajax.get({
-											url: "/parkingOrder/unlockKey/" + this.orderId,
-										}).then(res => {
-											let code = res.data.code
-											if (code == "200") {
-												let key = res.data.data
-												ajax.post({
-													url: "/parkingOrder/unlock/" + key
-												}).then(res => {
-													let code = res.data.code
-													if (code == "200") {
-														this.msgType = "success"
-														this.messageText = "您已成功解锁"
-														this.$refs.message.open()
-													} else {
-														this.msgType = "warn"
-														this.messageText = "解锁失败"
-														this.$refs.message.open()
-													}
-												})
-											}
-										})
-									}
-								})
-						    },
-						    fail(err) {
-						        console.log('搜索失败')
-						        console.error(err)
-						    }
-						})
-				    },
-				    fail(err) {
-				        console.log('初始化蓝牙失败')
-				        console.error(err)
-				    }
+				// 		        // 开启监听回调
+				// 		        uni.onBluetoothDeviceFound(device => {
+				// 					if (device.devices[0].deviceId === that.deviceId) {
+				// 						console.log("找到设备")
+										
+				// 					}
+				// 				})
+				// 		    },
+				// 		    fail(err) {
+				// 		        console.log('搜索失败')
+				// 		        console.error(err)
+				// 		    }
+				// 		})
+				//     },
+				//     fail(err) {
+				//         console.log('初始化蓝牙失败')
+				//         console.error(err)
+				//     }
+				// })
+			},
+			lock() {
+				ajax.post({
+					url: "/parkingOrder/lock/" + this.orderId
+				}).then(res => {
+					let code = res.data.code
+					if (code == "200") {
+						this.msgType = "success"
+						this.messageText = "您已成功关锁"
+						this.$refs.message.open()
+						this.getReserveInfo()
+					} else {
+						this.msgType = "warn"
+						this.messageText = "关锁失败"
+						this.$refs.message.open()
+					}
 				})
 			},
 			dialogConfirm() {
 				if(this.dialogType == "reserve") {
 					ajax.post({
-						url: "/parkingOrder/order",
-						header: {
-							"Content-type":"application/x-www-form-urlencoded"
-						},
-						data: {
-							userId: 1,
-							placeNum: this.selectedPlace
-						}
+						url: "/parkingOrder/reserve/" + this.selectedPlace,
 					}).then(res => {
 						let code = res.data.code
 						if (code == "200") {
@@ -289,9 +299,20 @@
 							this.messageText = "您已成功预约"
 							this.$refs.message.open()
 						}
+						uni.reLaunch({
+							url:"/pages/index/index"
+						})
 					})	
-				} else {
-					this.unlock()
+				} else if (this.dialogType == "unlock") {
+					this.msgType = "warn"
+					this.messageText = `正在解锁中，请稍后`
+					this.$refs.message.open()
+					setTimeout(this.unlock(), 3000);
+				} else if (this.dialogType == "lock") {
+					this.msgType = "warn"
+					this.messageText = `正在关锁中，请稍后`
+					this.$refs.message.open()
+					setTimeout(this.lock(), 3000);
 				}
 			},
 			dialogClose() {
@@ -301,7 +322,7 @@
 			},
 			getReserveInfo() {
 				ajax.get({
-					url: "/parkingOrder/reserve/1",
+					url: "/parkingOrder/reserve",
 				}).then(res => {
 					let info = res.data.data
 					if (info == null) {
@@ -317,6 +338,7 @@
 						}
 						this.orderId = info.orderId
 						this.deviceId = info.place.BLEDeviceId
+						this.orderStatus = info.orderStatus
 					}
 				})
 			},

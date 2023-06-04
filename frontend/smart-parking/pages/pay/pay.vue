@@ -28,7 +28,11 @@
 				}).then(res => {
 					let code = res.data.code
 					if (code == "200") {
-						uni.navigateTo({
+						uni.showToast({
+							title: "支付成功",
+							icon: 'none'
+						})
+						uni.reLaunch({
 							url:"/pages/index/index"
 						})
 					}
