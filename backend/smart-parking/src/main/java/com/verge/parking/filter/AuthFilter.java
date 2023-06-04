@@ -5,14 +5,16 @@ import com.verge.parking.common.LoginInfo;
 import com.verge.parking.common.UserContextHolder;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @WebFilter
+@Component
 public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -21,17 +23,15 @@ public class AuthFilter implements Filter {
 
         String uri = req.getRequestURI();
         AntPathMatcher matcher = new AntPathMatcher();
-        if (matcher.match("**/login", uri)) {
-            LoginInfo loginInfo = UserContextHolder.getLoginInfo();
-            if (loginInfo != null) {
-                String token = JWTUtils.createToken(loginInfo.getUserId());
-                resp.addCookie(new Cookie("token", token));
-            }
-        } else {
-            String token = req.getHeader("Authentication");
+        if (!matcher.match("/smart_parking/user/login", uri) && !Objects.equals(req.getMethod(), "OPTIONS")) {
+            String token = req.getHeader("Authorization");
             if (token != null && token.startsWith(JWTUtils.tokenPrefix)) {
                 LoginInfo loginInfo = JWTUtils.validateToken(token);
-                UserContextHolder.setUserInfo(loginInfo);
+                if (loginInfo != null) {
+                    UserContextHolder.setUserInfo(loginInfo);
+                } else {
+                    resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                }
             } else {
                 resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }

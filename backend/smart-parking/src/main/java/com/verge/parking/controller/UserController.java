@@ -1,13 +1,13 @@
 package com.verge.parking.controller;
 
 import com.verge.parking.common.CommonResponse;
+import com.verge.parking.common.JWTUtils;
+import com.verge.parking.common.UserContextHolder;
+import com.verge.parking.controller.vo.AuthInfo;
 import com.verge.parking.entity.User;
 import com.verge.parking.service.IUserService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -17,15 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Verge
  * @since 2023-04-09
  */
-@Controller
+@CrossOrigin(origins = "*")
+@RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private IUserService userService;
 
     @PostMapping("/register")
-    public CommonResponse register(String username, String password) {
-        User user = new User(username ,password);
+    public CommonResponse register(@RequestBody AuthInfo auth) {
+        User user = new User(auth.getUsername() , auth.getPassword());
         if (userService.register(user)) {
             return CommonResponse.success("注册成功");
         } else {
@@ -34,9 +35,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public CommonResponse login(String username, String password) {
-        if (userService.login(username, password)) {
-            return CommonResponse.success("登录成功");
+    public CommonResponse login(@RequestBody AuthInfo auth) {
+        if (userService.login(auth.getUsername(), auth.getPassword())) {
+            String token = JWTUtils.createToken(UserContextHolder.getLoginInfo().getUserId());
+            return CommonResponse.success(token);
         } else {
             return CommonResponse.fail("登录失败");
         }

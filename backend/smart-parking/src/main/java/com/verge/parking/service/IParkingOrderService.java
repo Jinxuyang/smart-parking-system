@@ -22,6 +22,10 @@ public interface IParkingOrderService extends IService<ParkingOrder> {
 
     boolean unlockPlace(String key);
 
+    boolean unlockPlace(Integer orderId);
+
+    boolean lockPlace(Integer orderId);
+
     int[] getPopularHours();
 
     void payOrder(Integer orderId);

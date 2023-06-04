@@ -19,7 +19,7 @@ public interface IParkingPlaceService extends IService<ParkingPlace> {
 
     ParkingPlaceStatus getPlaceStatusById(String macAddress);
 
-    boolean updatePlaceStatusById(String macAddress, ParkingPlaceStatus status);
+    void updatePlaceStatusById(String macAddress, ParkingPlaceStatus status);
 
     List<ParkingPlace> getPopularPlace();
 }

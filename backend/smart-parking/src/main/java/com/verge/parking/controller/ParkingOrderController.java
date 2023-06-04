@@ -2,6 +2,7 @@ package com.verge.parking.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.verge.parking.common.CommonResponse;
+import com.verge.parking.common.UserContextHolder;
 import com.verge.parking.controller.vo.ReserveInfo;
 import com.verge.parking.entity.ParkingOrder;
 import com.verge.parking.entity.ParkingPlace;
@@ -28,8 +29,9 @@ public class ParkingOrderController {
     @Autowired
     private IParkingPlaceService parkingPlaceService;
 
-    @GetMapping("/reserve/{userId}")
-    public CommonResponse getReserveInfo(@PathVariable Integer userId) {
+    @GetMapping("/reserve")
+    public CommonResponse getReserveInfo() {
+        Integer userId = UserContextHolder.getLoginInfo().getUserId();
         ParkingOrder order = parkingOrderService.getOne(new QueryWrapper<>(new ParkingOrder())
                 .eq("user_id", userId)
                 .ne("order_status", OrderStatus.FINISHED.getValue())
@@ -51,14 +53,15 @@ public class ParkingOrderController {
         return CommonResponse.success(reserveInfo);
     }
 
-    @PostMapping("/reserve")
-    public CommonResponse reserve(@RequestParam("placeNum") String placeNum, @RequestParam("userId") Integer userId){
+    @PostMapping("/reserve/{placeNum}")
+    public CommonResponse reserve(@PathVariable("placeNum") String placeNum){
         String area = placeNum.substring(0, 1);
         Integer number = Integer.valueOf(placeNum.substring(1));
         ParkingPlace place = parkingPlaceService.getOne(new QueryWrapper<>(new ParkingPlace())
                 .eq("area", area)
                 .eq("number", number)
         );
+        Integer userId = UserContextHolder.getLoginInfo().getUserId();
         if (parkingOrderService.reserve(place.getId(), userId)) {
             return CommonResponse.success();
         } else {
@@ -101,9 +104,28 @@ public class ParkingOrderController {
         return CommonResponse.success(popularHours);
     }
 
-    @PostMapping("/unlock/{key}")
-    public CommonResponse unlockPlace(@PathVariable("key") String key) {
-        if (parkingOrderService.unlockPlace(key)) {
+//    @PostMapping("/unlock/{key}")
+//    public CommonResponse unlockPlace(@PathVariable("key") String key) {
+//
+//        if (parkingOrderService.unlockPlace(key)) {
+//            return CommonResponse.success();
+//        } else {
+//            return CommonResponse.fail();
+//        }
+//    }
+
+    @PostMapping("/unlock/{orderId}")
+    public CommonResponse unlockPlace(@PathVariable("orderId") Integer orderId) {
+        if (parkingOrderService.unlockPlace(orderId)) {
+            return CommonResponse.success();
+        } else {
+            return CommonResponse.fail();
+        }
+    }
+
+    @PostMapping("/lock/{orderId}")
+    public CommonResponse lockPlace(@PathVariable("orderId") Integer orderId) {
+        if (parkingOrderService.lockPlace(orderId)) {
             return CommonResponse.success();
         } else {
             return CommonResponse.fail();

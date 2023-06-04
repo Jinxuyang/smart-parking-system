@@ -1,6 +1,7 @@
 package com.verge.parking.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.verge.parking.entity.ParkingOrder;
 import com.verge.parking.entity.ParkingPlace;
@@ -29,6 +30,7 @@ public class ParkingPlaceServiceImpl extends ServiceImpl<ParkingPlaceMapper, Par
 
     @Autowired
     private IParkingOrderService parkingOrderService;
+    private ParkingPlaceMapper parkingPlaceMapper;
 
     @Override
     public boolean updateLockStatus(String macAddress, boolean isLock) {
@@ -47,11 +49,12 @@ public class ParkingPlaceServiceImpl extends ServiceImpl<ParkingPlaceMapper, Par
     }
 
     @Override
-    public boolean updatePlaceStatusById(String macAddress, ParkingPlaceStatus status) {
-        ParkingPlace place = new ParkingPlace();
-        place.setId(macAddress);
-        place.setStatus(status);
-        return this.updateById(place);
+    public void updatePlaceStatusById(String macAddress, ParkingPlaceStatus status) {
+        this.update(
+            new UpdateWrapper<>(new ParkingPlace())
+                    .eq("id", macAddress.toUpperCase())
+                    .set("status", status.getValue())
+        );
     }
 
     @Override
