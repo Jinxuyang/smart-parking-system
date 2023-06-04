@@ -57,7 +57,7 @@ void connectToMQTT() {
 
     if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
         Serial.println("MQTT connected");
-        client.subscribe(controlTopic);
+        client.subscribe(controlTopic, 1);
     }
     else {
         Serial.print("MQTT failed, rc=");
@@ -78,8 +78,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     mqtt_buff += (char)payload[i];
   }
   Serial.println(mqtt_buff);
-  if (mqtt_buff.startsWith(WiFi.macAddress()) && topic == "Control") {
+  if (mqtt_buff.startsWith(WiFi.macAddress())) {
     String cmd = mqtt_buff.substring(18);
+    Serial.println(cmd);
     if (cmd == "lock") {
       parkingLock.turnLock();
     } else if (cmd == "unlock") {

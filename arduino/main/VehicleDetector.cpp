@@ -66,7 +66,7 @@ bool VehicleDetector::parkingStatusChanged() {
 }
 
 void VehicleDetector::loop() {
-    if (millis() - detectTick > 1000) {
+    if (millis() - detectTick > 5000) {
         hasCar();
         detectTick = millis();
     }
