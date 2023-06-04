@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <HCSR04.h>
-#include <ArduinoJson.h>
 
 class VehicleDetector {
     private:
@@ -12,22 +11,15 @@ class VehicleDetector {
         bool parkingStatus;
         bool prevParkingStatus;
 
-        unsigned long parkingTick;
-        unsigned long noParkingTick;
         unsigned long detectTick;
 
         String macAddress;
     public:
         VehicleDetector(int echoPin, int triggerPin);
 
+        bool getParkingStatus();
         bool hasCar();
-        bool isParkingTimeOut();
-        unsigned long getParkingTime();
-        unsigned long getNoParkingTime();
-        String getParkingStatusJSON();
-        DynamicJsonDocument getParkingStatus();
         bool parkingStatusChanged();
-
         void loop();
 };
 

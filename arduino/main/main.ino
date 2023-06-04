@@ -118,7 +118,7 @@ String packParkingInfo() {
     DynamicJsonDocument parkingStatus(1024);
     parkingStatus["macAddress"] = WiFi.macAddress();
     parkingStatus["lock"] = parkingLock.getLockStatus();
-    parkingStatus["hasCar"] = detector.hasCar();
+    parkingStatus["hasCar"] = detector.getParkingStatus();
     parkingStatus["time"] = timeClient.getEpochTime();
     String msg;
     serializeJson(parkingStatus, msg);
