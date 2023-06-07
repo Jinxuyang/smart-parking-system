@@ -40,6 +40,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/usage/usage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "车位使用率",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -3,7 +3,11 @@
 		<uni-notice-bar single  color="#2979FF" background-color="#EAF2FF" show-close text="红色: 车位已被占用 蓝色: 推荐车位 绿色: 当前选中车位" />
 		<view style="width: 100%;">
 			<l-echart ref="chart" @finished="init"></l-echart>
-		</view>	
+		</view>
+		<uni-card title="实时车流信息" :extra="trafficStatus">
+			<text class="uni-body">近1小时车辆停车数：{{traffic}} 辆</text><br>
+			<text class="uni-body">{{trafficMsg}}</text>
+		</uni-card>
 		<uni-card :is-shadow="true" title="预约信息">
 			{{reserveMsg}}
 			<view slot="actions" style="margin-left: 10px;margin-bottom: 10px;">
@@ -18,7 +22,6 @@
 				</view>
 			</view>
 		</uni-card>
-		
 		<uni-card :is-shadow="true">
 			<uni-row>
 				<uni-col :span="12">
@@ -38,6 +41,9 @@
 				<uni-icons type="checkmarkempty" size="20"></uni-icons>
 				数据更新时间：{{dataUpdateTime}}
 			</uni-row>
+		</uni-card>
+		<uni-card @click="toUsage">
+			<text class="uni-body">点击查看车位占用率信息>></text>
 		</uni-card>
 		<uni-card title="热点时间统计">
 			<qiun-data-charts 
@@ -71,6 +77,9 @@
 	export default {
 	    data() {
 	        return {
+				trafficStatus: "通畅",
+				traffic: 0,
+				trafficMsg: "",
 				orderStatus: null,
 				loading: false,
 				deviceId: "",
@@ -142,8 +151,29 @@
 			this.getPopluarPeriod()
 			this.getReserveInfo()
 			this.getPlaceInfo()
+			this.getTraffice()
 		},
 		methods: {
+			toUsage() {
+				uni.navigateTo({
+					url:"/pages/usage/usage"
+				})
+			},
+			getTraffice() {
+				ajax.get({
+					url: "/parkingOrder/traffic/1"
+				}).then(res => {
+					let traffic = res.data.data
+					this.traffic = traffic
+					if (traffic > 50) {
+						this.trafficMsg = "当前车流较大，可能发生拥堵"
+						this.trafficStatus = "拥堵"
+					} else {
+						this.trafficMsg = "当前车流较小，道路畅通无阻"
+						this.trafficStatus = "通畅"
+					}
+				})
+			},
 			toPay() {
 				uni.navigateTo({
 					url: "/pages/pay/pay" + "?orderId=" + this.orderId
