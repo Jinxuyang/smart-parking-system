@@ -12,6 +12,12 @@ import com.verge.parking.service.IParkingPlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  前端控制器
@@ -98,22 +104,6 @@ public class ParkingOrderController {
         return CommonResponse.success(parkingOrderService.getUnlockKey(orderId));
     }
 
-    @GetMapping("/popular/time")
-    public CommonResponse getPopularTimePeriod() {
-        int[] popularHours = parkingOrderService.getPopularHours();
-        return CommonResponse.success(popularHours);
-    }
-
-//    @PostMapping("/unlock/{key}")
-//    public CommonResponse unlockPlace(@PathVariable("key") String key) {
-//
-//        if (parkingOrderService.unlockPlace(key)) {
-//            return CommonResponse.success();
-//        } else {
-//            return CommonResponse.fail();
-//        }
-//    }
-
     @PostMapping("/unlock/{orderId}")
     public CommonResponse unlockPlace(@PathVariable("orderId") Integer orderId) {
         if (parkingOrderService.unlockPlace(orderId)) {
@@ -130,5 +120,47 @@ public class ParkingOrderController {
         } else {
             return CommonResponse.fail();
         }
+    }
+
+    @GetMapping("/popular/time")
+    public CommonResponse getPopularTimePeriod() {
+        int[] popularHours = parkingOrderService.getPopularHours();
+        return CommonResponse.success(popularHours);
+    }
+
+    @GetMapping("/usage/{hour}")
+    public CommonResponse getUsage(@PathVariable("hour") Integer hour) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime oneDayAgo = now.minusHours(hour);
+        List<ParkingPlace> places = parkingPlaceService.list(new QueryWrapper<>(new ParkingPlace())
+                .select("id", "area", "number")
+        );
+        Map<String, Double> res = new HashMap<>();
+        for (ParkingPlace place : places) {
+            List<ParkingOrder> orders = parkingOrderService.list(new QueryWrapper<>(new ParkingOrder())
+                    .eq("parking_place_id", place.getId())
+                    .between("start_time", oneDayAgo, now)
+                    .and(i -> i.eq("order_status", OrderStatus.FINISHED.getValue()).or().eq("order_status", OrderStatus.WAITING_PAY.getValue()))
+            );
+            int cnt = 0;
+            for (ParkingOrder order : orders) {
+                Duration duration = Duration.between(order.getStartTime(), order.getStopTime());
+                cnt += duration.toMinutes();
+            }
+            Double rate = cnt/(hour * 60.0);
+
+            res.put(place.getArea() + place.getNumber(), rate);
+        }
+
+        return CommonResponse.success(res);
+    }
+    @GetMapping("/traffic/{hour}")
+    public CommonResponse getTraffic(@PathVariable("hour") Integer hour) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime oneHourAgo = now.minusHours(hour);
+        long size = parkingOrderService.count(new QueryWrapper<>(new ParkingOrder())
+                .between("start_time", oneHourAgo, now)
+        );
+        return CommonResponse.success(size);
     }
 }
