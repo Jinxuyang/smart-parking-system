@@ -6,7 +6,7 @@ import ajax from '@/uni_modules/u-ajax'
 // 创建请求实例
 const instance = ajax.create({
   // 初始配置
-  baseURL: 'http://azp67r.natappfree.cc/smart_parking',
+  baseURL: 'http://localhost:5678/smart_parking',
 })
 
 // 添加请求拦截器

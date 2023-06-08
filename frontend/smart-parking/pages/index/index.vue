@@ -186,7 +186,7 @@
 				let regions = [];
 				
 				await ajax.get({
-					url: "/parkingPlace/popular"
+					url: "/parkingPlace/recommend"
 				}).then(res => {
 					let takenPlaceNames = res.data.data
 					console.log(takenPlaceNames)
