@@ -58,14 +58,9 @@ public class ParkingPlaceController {
         return CommonResponse.success(numbers);
     }
 
-    @GetMapping("/popular")
+    @GetMapping("/recommend")
     public CommonResponse getPopularPlace() {
-        List<ParkingPlace> popularPlace = parkingPlaceService.getPopularPlace();
-        List<String> nums = new ArrayList<>();
-        for (ParkingPlace place : popularPlace) {
-            String num = place.getArea() + String.format("%03d", place.getNumber());
-            nums.add(num);
-        }
-        return CommonResponse.success(nums);
+        List<String> recommend = parkingPlaceService.getRecommend(0.5, 0.5);
+        return CommonResponse.success(recommend);
     }
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.verge.parking.entity.enums.ParkingPlaceStatus;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -21,5 +22,9 @@ public interface IParkingPlaceService extends IService<ParkingPlace> {
 
     void updatePlaceStatusById(String macAddress, ParkingPlaceStatus status);
 
-    List<ParkingPlace> getPopularPlace();
+    Map<String, Double> getUsage(int hour);
+
+    Map<String, Integer> getPopularPlace();
+
+    List<String> getRecommend(double weight1, double weight2);
 }
